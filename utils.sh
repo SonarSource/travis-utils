@@ -42,7 +42,7 @@ function build {
 
 # Usage: build_sonarqube "BRANCH"
 function build_sonarqube {
-  build "/tmp/sonarqube_$1" "SonarSource/sonarqube" "$1" "mvn install -DskipTests -Pdev -Dassembly.format=dir -Dchecksum.failOnError=false"
+  build "/tmp/sonarqube_$1" "SonarSource/sonarqube" "$1" "mvn install -DskipTests -Pdev"
 }
 
 # Usage: build_parent_pom "VERSION"
