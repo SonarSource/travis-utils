@@ -107,10 +107,7 @@ function buildAndUnzipSonarQubeFromSources {
   install_jars
 
   # Build the application
-  mvn install -DskipTests -Ddev \
-    -Dassembly.format=dir \
-    -Dassembly.includeBaseDirectory=false \
-    -Dassembly.checksum=false
+  mvn install -DskipTests -Ddev -Dassembly.format=dir -Dassembly.checksum=false
 }
 
 # Usage: runDatabaseCI "database" "jdbc_url" "login" "pwd"
@@ -118,7 +115,7 @@ function runDatabaseCI {
   buildAndUnzipSonarQubeFromSources
 
   # Start server
-	cd sonar-application/target/sonarqube-*
+	cd sonar-application/target/sonarqube-*/sonarqube-*
 	(exec java -jar lib/sonar-application-*.jar \
 	  -Dsonar.log.console=true \
 	  -Dsonar.jdbc.url=$2 -Dsonar.jdbc.username=$3 -Dsonar.jdbc.password=$4 \
