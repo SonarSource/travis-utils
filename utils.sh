@@ -114,9 +114,6 @@ function buildAndUnzipSonarQubeFromSources {
 
 # Usage: runDatabaseCI "database" "jdbc_url" "login" "pwd"
 function runDatabaseCI {
-  curl -sSL https://raw.githubusercontent.com/dgageot/travis-utils/master/install.sh | sh
-	source /tmp/travis-utils/utils.sh
-
   buildAndUnzipSonarQubeFromSources
 
   # Start server
