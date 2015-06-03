@@ -1,5 +1,7 @@
 #!/bin/bash
 
+export TRAVIS_UTILS_HOME=/tmp/travis-utils
+
 function reset_ruby {
 	unset GEM_PATH GEM_HOME RAILS_ENV
 }
@@ -8,7 +10,7 @@ function install_jars {
   echo "Install jars into local maven repository"
 
   mkdir -p ~/.m2/repository
-  cp -r m2repo/* ~/.m2/repository
+  cp -r $TRAVIS_UTILS_HOME/m2repo/* ~/.m2/repository
 }
 
 # Usage: fetch "directory" "user/project" "branch"
