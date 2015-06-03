@@ -34,6 +34,8 @@ function build() {
   if [ "${5:-}" != "FORCE" ]; then
     echo "OK" > $HOME/.m2/repository/$SHA1
   fi
+
+	unset SHA1
 }
 
 # Usage: build_sonarqube "BRANCH"
@@ -51,7 +53,35 @@ function build_orchestrator() {
   build "/tmp/orchestrator_$1" "SonarSource/sonar-orchestrator" "$1" "mvn install -DskipTests"
 }
 
-# Usage: build_its
-function build_its() {
-	fetch "/tmp/its" "SonarSource/sonar-tests-languages" "master"
+# Usage: fetch_its
+function fetch_its() {
+  fetch "/tmp/its" "SonarSource/sonar-tests-languages" "master"
+}
+
+# Usage: create_orchestrator_properties
+function create_orchestrator_properties() {
+  PROPERTIES=/tmp/orchestrator.properties
+
+  echo "sonar.jdbc.dialect=embedded" > $PROPERTIES
+  echo "orchestrator.updateCenterUrl=http://update.sonarsource.org/update-center-dev.properties" >> $PROPERTIES
+  echo "maven.localRepository=${HOME}/.m2/repository" >> $PROPERTIES
+
+  unset PROPERTIES
+}
+
+# Usage: run_its "SONAR_VERSION"
+function run_its() {
+	reset_ruby()
+	install_jars()
+
+	build_sonarqube "master"
+	build_parent_pom "28"
+	build_parent_pom "30"
+	build_orchestrator "3.2"
+
+  fetch_its
+  create_orchestrator_properties
+
+  cd /tmp/its
+  mvn -f it-java/plugin/pom.xml -Dmaven.test.redirectTestOutputToFile=false -DjavaVersion=DEV -Dsonar.runtimeVersion=$1 -Dorchestrator.configUrl=file:///tmp/orchestrator.properties install
 }
