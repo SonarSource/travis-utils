@@ -95,3 +95,58 @@ function run_its {
     -Dorchestrator.configUrl=file:///tmp/orchestrator.properties \
     install
 }
+
+## Database CI ##
+
+# Usage: buildAndUnzipSonarQubeFromSources
+function buildAndUnzipSonarQubeFromSources {
+  reset_ruby
+  install_jars
+
+	# Build the application
+	mvn install -DskipTests -Pdev
+
+	# Unzip
+	cd sonar-application/target/
+	unzip -oq sonarqube-*.zip
+	cd sonarqube-*
+}
+
+# Usage: runDatabaseCI "database" "jdbc_url" "login" "pwd"
+function runDatabaseCI {
+  curl -sSL https://raw.githubusercontent.com/dgageot/travis-utils/master/install.sh | sh
+	source /tmp/travis-utils/utils.sh
+
+  buildAndUnzipSonarQubeFromSources
+
+  # Start server
+	(exec java -jar lib/sonar-application-*.jar \
+	  -Dsonar.log.console=true \
+	  -Dsonar.jdbc.url=$2 -Dsonar.jdbc.username=$3 -Dsonar.jdbc.password=$4 \
+	  -Dsonar.web.javaAdditionalOpts="-Djava.security.egd=file:/dev/./urandom"
+	  "$@") &
+	pid=$!
+
+	# Wait for server to be up and running
+	for i in {1..30}; do
+		set +e
+		curl -s http://localhost:9000/api/system/status | grep "UP"
+		retval=$?
+		set -e
+		if [ $retval -eq 0 ]; then
+			# Success. Let's stop the server
+			# Should we use orchestrator's stop command?
+			kill -9 $pid
+
+			# Run the tests
+      cd ../../..
+    	mvn -PdbTests test -Dsonar.jdbc.dialect=$1 -Dsonar.jdbc.url=$2 -Dsonar.jdbc.username=$3 -Dsonar.jdbc.password=$4
+    	exit $?
+		fi
+
+		sleep 1
+	done
+
+	# Failed to start
+	exit 1
+}
