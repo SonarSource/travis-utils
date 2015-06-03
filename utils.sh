@@ -107,7 +107,7 @@ function buildAndUnzipSonarQubeFromSources {
   install_jars
 
   # Build the application
-  mvn install -DskipTests -Ddev -Dassembly.format=dir -Dchecksum.failOnError=false
+  mvn install -DskipTests -Pdev -Dassembly.format=dir -Dchecksum.failOnError=false
 }
 
 # Usage: runDatabaseCI "database" "jdbc_url" "login" "pwd"
