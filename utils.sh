@@ -83,5 +83,10 @@ function run_its() {
   create_orchestrator_properties
 
   cd /tmp/its
-  mvn -f it-java/plugin/pom.xml -Dmaven.test.redirectTestOutputToFile=false -DjavaVersion=DEV -Dsonar.runtimeVersion=$1 -Dorchestrator.configUrl=file:///tmp/orchestrator.properties install
+  mvn -f it-java/plugin/pom.xml \
+	  -Dmaven.test.redirectTestOutputToFile=false \
+	  -DjavaVersion=DEV \
+	  -Dsonar.runtimeVersion=$1 \
+	  -Dorchestrator.configUrl=file:///tmp/orchestrator.properties \
+	  install
 }
