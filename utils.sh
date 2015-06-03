@@ -11,13 +11,13 @@ function install_jars() {
   cp -r m2repo/* ~/.m2/repository
 }
 
-# usage: fetch "directory" "user/project" "branch"
+# Usage: fetch "directory" "user/project" "branch"
 function fetch() {
   mkdir -p $1
   curl -su dgageot:$ITS_TOKEN -L https://github.com/$2/tarball/$3 | tar zx --strip-components 1 -C $1
 }
 
-# usage: build "directory" "user/project" "branch" "build command" ["FORCE"]
+# Usage: build "directory" "user/project" "branch" "build command" ["FORCE"]
 function build() {
   SHA1=$(curl -su dgageot:$ITS_TOKEN -L https://api.github.com/repos/$2/git/refs/heads/$3 | jq -r .object.sha)
 
@@ -34,4 +34,24 @@ function build() {
   if [ "${5:-}" != "FORCE" ]; then
     echo "OK" > $HOME/.m2/repository/$SHA1
   fi
+}
+
+# Usage: build_sonarqube "BRANCH"
+function build_sonarqube() {
+  build "/tmp/sonarqube_$1" "SonarSource/sonarqube" "$1" "mvn install -DskipTests -Pdev"
+}
+
+# Usage: build_parent_pom "VERSION"
+function build_parent_pom() {
+  build "/tmp/parent_$1" "SonarSource/parent" "$1" "mvn install -DskipTests"
+}
+
+# Usage: build_orchestrator "VERSION"
+function build_orchestrator() {
+  build "/tmp/orchestrator_$1" "SonarSource/sonar-orchestrator" "$1" "mvn install -DskipTests"
+}
+
+# Usage: build_its
+function build_its() {
+	fetch "/tmp/its" "SonarSource/sonar-tests-languages" "master"
 }
