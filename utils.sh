@@ -73,22 +73,25 @@ function create_orchestrator_properties {
 
 # Usage: run_its "SONAR_VERSION"
 function run_its {
-	reset_ruby
-	install_jars
+  reset_ruby
+  install_jars
 
-	build_sonarqube "master"
-	build_parent_pom "28"
-	build_parent_pom "30"
-	build_orchestrator "3.2"
+  if [ "$1" == "DEV" ]; then
+    build_sonarqube "master"
+  fi
+
+  build_parent_pom "28"
+  build_parent_pom "30"
+  build_orchestrator "3.2"
 
   fetch_its
   create_orchestrator_properties
 
   cd /tmp/its
   mvn -f it-java/plugin/pom.xml \
-	  -Dmaven.test.redirectTestOutputToFile=false \
-	  -DjavaVersion=DEV \
-	  -Dsonar.runtimeVersion=$1 \
-	  -Dorchestrator.configUrl=file:///tmp/orchestrator.properties \
-	  install
+    -Dmaven.test.redirectTestOutputToFile=false \
+    -DjavaVersion=DEV \
+    -Dsonar.runtimeVersion=$1 \
+    -Dorchestrator.configUrl=file:///tmp/orchestrator.properties \
+    install
 }
