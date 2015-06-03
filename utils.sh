@@ -24,7 +24,7 @@ function build {
   SHA1=$(curl -su dgageot:$ITS_TOKEN -L https://api.github.com/repos/$2/git/refs/heads/$3 | jq -r .object.sha)
   if [ "$SHA1" == "null" ]; then
     echo "Failed to retrieve project [$2:$3]. It may be an authentication failure"
-		ecit 1
+		exit 1
   fi
 
   if [ -f "$HOME/.m2/repository/$SHA1" ]; then
