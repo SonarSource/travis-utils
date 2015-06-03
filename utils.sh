@@ -71,8 +71,8 @@ function create_orchestrator_properties() {
 
 # Usage: run_its "SONAR_VERSION"
 function run_its() {
-	reset_ruby()
-	install_jars()
+	reset_ruby
+	install_jars
 
 	build_sonarqube "master"
 	build_parent_pom "28"
