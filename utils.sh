@@ -140,7 +140,7 @@ function runDatabaseCI {
 
 			# Run the tests
       cd ../../..
-    	mvn -PdbTests test -Dsonar.jdbc.dialect=$1 -Dsonar.jdbc.url=$2 -Dsonar.jdbc.username=$3 -Dsonar.jdbc.password=$4
+    	mvn -PdbTests package -Dsonar.jdbc.dialect=$1 -Dsonar.jdbc.url=$2 -Dsonar.jdbc.username=$3 -Dsonar.jdbc.password=$4
     	exit $?
 		fi
 
