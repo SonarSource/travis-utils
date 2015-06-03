@@ -42,7 +42,10 @@ function build {
 
 # Usage: build_sonarqube "BRANCH"
 function build_sonarqube {
-  build "/tmp/sonarqube_$1" "SonarSource/sonarqube" "$1" "mvn install -DskipTests -Pdev"
+  build "/tmp/sonarqube_$1" "SonarSource/sonarqube" "$1" "mvn install -DskipTests -Ddev \
+    -Dassembly.format=dir \
+    -Dassembly.includeBaseDirectory=false \
+    -Dassembly.checksum=false"
 }
 
 # Usage: build_parent_pom "VERSION"
@@ -103,13 +106,11 @@ function buildAndUnzipSonarQubeFromSources {
   reset_ruby
   install_jars
 
-	# Build the application
-	mvn install -DskipTests -Pdev
-
-	# Unzip
-	cd sonar-application/target/
-	unzip -oq sonarqube-*.zip
-	cd sonarqube-*
+  # Build the application
+  mvn install -DskipTests -Ddev \
+    -Dassembly.format=dir \
+    -Dassembly.includeBaseDirectory=false \
+    -Dassembly.checksum=false
 }
 
 # Usage: runDatabaseCI "database" "jdbc_url" "login" "pwd"
@@ -117,6 +118,7 @@ function runDatabaseCI {
   buildAndUnzipSonarQubeFromSources
 
   # Start server
+	cd sonar-application/target/sonarqube-*
 	(exec java -jar lib/sonar-application-*.jar \
 	  -Dsonar.log.console=true \
 	  -Dsonar.jdbc.url=$2 -Dsonar.jdbc.username=$3 -Dsonar.jdbc.password=$4 \
