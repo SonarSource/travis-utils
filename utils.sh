@@ -22,6 +22,10 @@ function fetch {
 # Usage: build "directory" "user/project" "branch" "build command" ["FORCE"]
 function build {
   SHA1=$(curl -su dgageot:$ITS_TOKEN -L https://api.github.com/repos/$2/git/refs/heads/$3 | jq -r .object.sha)
+  if [ "$SHA1" == "null" ]; then
+    echo "Failed to retrieve project [$2:$3]. It may be an authentication failure"
+		ecit 1
+  fi
 
   if [ -f "$HOME/.m2/repository/$SHA1" ]; then
     echo "Project [$2:$3] with sha1 [$SHA1] is already on cache"
