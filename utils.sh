@@ -85,7 +85,7 @@ function build_green_sonarqube_snapshot {
   echo "Fetch and build latest green snapshot of SonarQube"
 
   LAST_GREEN=$(latest_green "SonarSource/sonarqube" "master")
-  build_sonarqube "LAST_GREEN"
+  build_sonarqube "$LAST_GREEN"
 }
 
 # Usage: run_its "SONAR_VERSION"
