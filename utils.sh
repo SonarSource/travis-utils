@@ -124,7 +124,6 @@ function latest_green {
 
   for PAGE in 1 2 3 4 5; do
     SHA_LIST=$(curl -sSLu dgageot:$ITS_TOKEN "https://api.github.com/repos/$1/commits?sha=$2&page=$PAGE" | jq -r .[].sha)
-    echo $SHA_LIST
 
     for SHA in $SHA_LIST; do
       STATE=$(commit_status "$1" "$SHA")
