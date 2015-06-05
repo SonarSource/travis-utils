@@ -77,6 +77,7 @@ function create_orchestrator_properties {
   unset PROPERTIES
 }
 
+# Usage: build_green_sonarqube_snapshot
 function build_green_sonarqube_snapshot {
   echo "Fetch and build latest green snapshot of SonarQube"
 
