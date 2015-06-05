@@ -21,7 +21,7 @@ function fetch {
 
 # Usage: build "directory" "user/project" "branch|tag|sha" "build command" ["FORCE"]
 function build {
-  echo "Search project [$2:$3] by branch..."
+  echo "Search project [$2:$3]..."
 
   SHA1=$(curl -su dgageot:$ITS_TOKEN -L https://api.github.com/repos/$2/git/commits/$3 | jq -r .sha)
   if [ "$SHA1" == "null" ]; then
