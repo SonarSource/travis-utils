@@ -1,0 +1,1 @@
+Travis CI toolchain used for SonarSource and SonarCommunity builds.
