@@ -81,7 +81,10 @@ function build_green_sonarqube_snapshot {
   echo "Fetch and build latest green snapshot of SonarQube"
 
   LAST_GREEN=$(latest_green "SonarSource/sonarqube" "master")
+
   build_sonarqube "$LAST_GREEN"
+
+  unset LAST_GREEN
 }
 
 # Usage: run_its "SONAR_VERSION"
@@ -133,20 +136,13 @@ function latest_green {
 
 ## Database CI ##
 
-# Usage: buildAndUnzipSonarQubeFromSources
-function buildAndUnzipSonarQubeFromSources {
-  reset_ruby
-  install_jars
-
-  # Build the application
-  mvn install -DskipTests -Pdev -Dassembly.format=dir -Dchecksum.failOnError=false
-}
-
 # Usage: runDatabaseCI "database" "jdbc_url" "login" "pwd"
 function runDatabaseCI {
-  buildAndUnzipSonarQubeFromSources
+  # Build current version of SonarQube (Don't create a zip)
+  mvn install -DskipTests -Pdev -Dassembly.format=dir -Dchecksum.failOnError=false
 
   # Start server
+  reset_ruby
   cd sonar-application/target/sonarqube-*/sonarqube-*
   (exec java -jar lib/sonar-application-*.jar \
     -Dsonar.log.console=true \
@@ -167,6 +163,7 @@ function runDatabaseCI {
       kill -9 $pid
 
       # Run the tests
+      install_jars
       cd ../../..
       mvn -PdbTests package -Dsonar.jdbc.dialect=$1 -Dsonar.jdbc.url=$2 -Dsonar.jdbc.username=$3 -Dsonar.jdbc.password=$4
       exit $?
