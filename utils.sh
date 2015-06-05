@@ -19,16 +19,14 @@ function fetch {
   curl -su dgageot:$ITS_TOKEN -L https://github.com/$2/tarball/$3 | tar zx --strip-components 1 -C $1
 }
 
-# Usage: build "directory" "user/project" "branch" "build command" ["FORCE"]
+# Usage: build "directory" "user/project" "branch|tag|sha" "build command" ["FORCE"]
 function build {
   echo "Search project [$2:$3] by branch..."
-  SHA1=$(curl -su dgageot:$ITS_TOKEN -L https://api.github.com/repos/$2/git/refs/heads/$3 | jq -r .object.sha)
+
+  SHA1=$(curl -su dgageot:$ITS_TOKEN -L https://api.github.com/repos/$2/git/commits/$3 | jq -r .sha)
   if [ "$SHA1" == "null" ]; then
-    echo "Search project [$2:$3] by tag..."
-    SHA1=$(curl -su dgageot:$ITS_TOKEN -L https://api.github.com/repos/$2/git/refs/tags/$3 | jq -r .object.sha)
-  fi
-  if [ "$SHA1" == "null" ]; then
-    SHA1=$3
+    echo "Failed to retrieve project [$2:$3]. It may be an authentication failure"
+    exit 1
   fi
 
   if [ -f "$HOME/.m2/repository/$SHA1" ]; then
