@@ -23,7 +23,7 @@ function fetch {
 function build {
   echo "Search project [$2:$3]..."
 
-  SHA1=$(curl -su dgageot:$ITS_TOKEN -L https://api.github.com/repos/$2/git/commits/$3 | jq -r .sha)
+  SHA1=$(curl -sSLu dgageot:$ITS_TOKEN https://api.github.com/repos/$2/commits/$3 | jq -r .sha)
   if [ "$SHA1" == "null" ]; then
     echo "Failed to retrieve project [$2:$3]. It may be an authentication failure"
     exit 1
