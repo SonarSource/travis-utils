@@ -82,6 +82,8 @@ function create_orchestrator_properties {
 }
 
 function build_green_sonarqube_snapshot {
+  echo "Fetch and build latest green snapshot of SonarQube"
+
   LAST_GREEN=$(latest_green "SonarSource/sonarqube" "master")
   build_sonarqube "LAST_GREEN"
 }
