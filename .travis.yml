@@ -1,0 +1,20 @@
+language: java
+
+jdk:
+  - oraclejdk7
+  - oraclejdk8
+
+install: true
+script: ./travis.sh
+env:
+  - TESTS=PARENT
+  - TESTS=ORCHESTRATOR
+  - TESTS=SONARQUBE_SNAPSHOT
+  - TESTS=ITS
+
+cache:
+  directories:
+    - '$HOME/.m2/repository'
+
+notifications:
+  email: false
