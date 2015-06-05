@@ -87,7 +87,8 @@ function run_its {
   install_jars
 
   if [ "$1" == "DEV" ]; then
-    build_sonarqube "master"
+    LAST_GREEN=$(latest_green "SonarSource/sonarqube" "master")
+    build_sonarqube "LAST_GREEN"
   fi
 
   build_parent_pom "28"
@@ -104,6 +105,31 @@ function run_its {
     -Dsonar.runtimeVersion=$1 \
     -Dorchestrator.configUrl=file:///tmp/orchestrator.properties \
     install
+}
+
+# Usage: commit_status "user/project" "COMMIT|BRANCH"
+function commit_status {
+  curl -sSLu dgageot:$ITS_TOKEN "https://api.github.com/repos/$1/commits/$2/status" | jq -r "[.statuses[] | select(.description==\"The Travis CI build passed\")][1].state"
+}
+
+# Usage: latest_green "user/project" "BRANCH"
+function latest_green {
+  echo "Find latest green version of [$1:$2]"
+
+  for PAGE in 1 2 3 4 5; do
+    SHA_LIST=$(curl -sSLu dgageot:$ITS_TOKEN "https://api.github.com/repos/$1/commits?sha=$2&page=$PAGE" | jq -r .[].sha)
+    echo $SHA_LIST
+
+    for SHA in $SHA_LIST; do
+      STATE=$(commit_status "$1" "$SHA")
+      if [ "$STATE" == "success" ]; then
+        echo $SHA
+        return
+      fi
+    done
+  done
+
+  echo "Couldn't find green commit for [$1:$2]"
 }
 
 ## Database CI ##
