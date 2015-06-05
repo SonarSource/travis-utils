@@ -16,7 +16,7 @@ function install_jars {
 # Usage: fetch "directory" "user/project" "branch"
 function fetch {
   mkdir -p $1
-  curl -su dgageot:$ITS_TOKEN -L https://github.com/$2/tarball/$3 | tar zx --strip-components 1 -C $1
+  curl -ssLu dgageot:$ITS_TOKEN https://github.com/$2/tarball/$3 | tar zx --strip-components 1 -C $1
 }
 
 # Usage: build "directory" "user/project" "branch|tag|sha" "build command" ["FORCE"]
