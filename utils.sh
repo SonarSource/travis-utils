@@ -3,7 +3,7 @@
 export TRAVIS_UTILS_HOME=/tmp/travis-utils
 
 function reset_ruby {
-	unset GEM_PATH GEM_HOME RAILS_ENV
+  unset GEM_PATH GEM_HOME RAILS_ENV
 }
 
 function install_jars {
@@ -21,16 +21,16 @@ function fetch {
 
 # Usage: build "directory" "user/project" "branch" "build command" ["FORCE"]
 function build {
-	echo "Search project [$2:$3] by branch..."
+  echo "Search project [$2:$3] by branch..."
   SHA1=$(curl -su dgageot:$ITS_TOKEN -L https://api.github.com/repos/$2/git/refs/heads/$3 | jq -r .object.sha)
   if [ "$SHA1" == "null" ]; then
-		echo "Search project [$2:$3] by tag..."
-	  SHA1=$(curl -su dgageot:$ITS_TOKEN -L https://api.github.com/repos/$2/git/refs/tags/$3 | jq -r .object.sha)
+    echo "Search project [$2:$3] by tag..."
+    SHA1=$(curl -su dgageot:$ITS_TOKEN -L https://api.github.com/repos/$2/git/refs/tags/$3 | jq -r .object.sha)
   fi
 
   if [ "$SHA1" == "null" ]; then
     echo "Failed to retrieve project [$2:$3]. It may be an authentication failure"
-		exit 1
+    exit 1
   fi
 
   if [ -f "$HOME/.m2/repository/$SHA1" ]; then
@@ -47,7 +47,7 @@ function build {
     echo "OK" > $HOME/.m2/repository/$SHA1
   fi
 
-	unset SHA1
+  unset SHA1
 }
 
 # Usage: build_sonarqube "BRANCH"
@@ -122,34 +122,34 @@ function runDatabaseCI {
   buildAndUnzipSonarQubeFromSources
 
   # Start server
-	cd sonar-application/target/sonarqube-*/sonarqube-*
-	(exec java -jar lib/sonar-application-*.jar \
-	  -Dsonar.log.console=true \
-	  -Dsonar.jdbc.url=$2 -Dsonar.jdbc.username=$3 -Dsonar.jdbc.password=$4 \
-	  -Dsonar.web.javaAdditionalOpts="-Djava.security.egd=file:/dev/./urandom"
-	  "$@") &
-	pid=$!
+  cd sonar-application/target/sonarqube-*/sonarqube-*
+  (exec java -jar lib/sonar-application-*.jar \
+    -Dsonar.log.console=true \
+    -Dsonar.jdbc.url=$2 -Dsonar.jdbc.username=$3 -Dsonar.jdbc.password=$4 \
+    -Dsonar.web.javaAdditionalOpts="-Djava.security.egd=file:/dev/./urandom"
+    "$@") &
+  pid=$!
 
-	# Wait for server to be up and running
-	for i in {1..30}; do
-		set +e
-		curl -s http://localhost:9000/api/system/status | grep "UP"
-		retval=$?
-		set -e
-		if [ $retval -eq 0 ]; then
-			# Success. Let's stop the server
-			# Should we use orchestrator's stop command?
-			kill -9 $pid
+  # Wait for server to be up and running
+  for i in {1..30}; do
+    set +e
+    curl -s http://localhost:9000/api/system/status | grep "UP"
+    retval=$?
+    set -e
+    if [ $retval -eq 0 ]; then
+      # Success. Let's stop the server
+      # Should we use orchestrator's stop command?
+      kill -9 $pid
 
-			# Run the tests
+      # Run the tests
       cd ../../..
-    	mvn -PdbTests package -Dsonar.jdbc.dialect=$1 -Dsonar.jdbc.url=$2 -Dsonar.jdbc.username=$3 -Dsonar.jdbc.password=$4
-    	exit $?
-		fi
+      mvn -PdbTests package -Dsonar.jdbc.dialect=$1 -Dsonar.jdbc.url=$2 -Dsonar.jdbc.username=$3 -Dsonar.jdbc.password=$4
+      exit $?
+    fi
 
-		sleep 1
-	done
+    sleep 1
+  done
 
-	# Failed to start
-	exit 1
+  # Failed to start
+  exit 1
 }
