@@ -81,14 +81,18 @@ function create_orchestrator_properties {
   unset PROPERTIES
 }
 
+function build_green_sonarqube_snapshot {
+  LAST_GREEN=$(latest_green "SonarSource/sonarqube" "master")
+  build_sonarqube "LAST_GREEN"
+}
+
 # Usage: run_its "SONAR_VERSION"
 function run_its {
   reset_ruby
   install_jars
 
   if [ "$1" == "DEV" ]; then
-    LAST_GREEN=$(latest_green "SonarSource/sonarqube" "master")
-    build_sonarqube "LAST_GREEN"
+    build_green_sonarqube_snapshot
   fi
 
   build_parent_pom "28"
@@ -112,7 +116,7 @@ function commit_status {
   curl -sSLu dgageot:$ITS_TOKEN "https://api.github.com/repos/$1/commits/$2/status" | jq -r "[.statuses[] | select(.description==\"The Travis CI build passed\")][1].state"
 }
 
-# Usage: latest_green "user/project" "BRANCH"
+# Usage: latest_green "user/project" "tr  BRANCH"
 function latest_green {
   echo "Find latest green version of [$1:$2]"
 
