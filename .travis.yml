@@ -7,10 +7,9 @@ jdk:
 install: true
 script: ./travis.sh
 env:
-  - TESTS=PARENT
-  - TESTS=ORCHESTRATOR
   - TESTS=SONARQUBE_SNAPSHOT
-  - TESTS=ITS
+  - TESTS=RUN_ITS_DEV
+  - TESTS=RUN_ITS_LATEST
 
 cache:
   directories:
