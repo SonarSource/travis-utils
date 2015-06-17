@@ -111,7 +111,7 @@ function runDatabaseCI {
   cd sonar-application/target/sonarqube-*/sonarqube-*
   (exec java -jar lib/sonar-application-*.jar \
     -Dsonar.log.console=true \
-    -Dsonar.jdbc.url=$2 -Dsonar.jdbc.username=$3 -Dsonar.jdbc.password=$4 \
+    -Dsonar.jdbc.url=$2 -Dsonar.jdbc.username=$3 -Dsonar.jdbc.password=${4:-} \
     -Dsonar.web.javaAdditionalOpts="-Djava.security.egd=file:/dev/./urandom"
     "$@") &
   pid=$!
@@ -130,7 +130,7 @@ function runDatabaseCI {
       # Run the tests
       install_jars
       cd ../../..
-      mvn -PdbTests package -Dsonar.jdbc.dialect=$1 -Dsonar.jdbc.url=$2 -Dsonar.jdbc.username=$3 -Dsonar.jdbc.password=$4
+      mvn -PdbTests package -Dsonar.jdbc.dialect=$1 -Dsonar.jdbc.url=$2 -Dsonar.jdbc.username=$3 -Dsonar.jdbc.password=${4:-}
       exit $?
     fi
 
