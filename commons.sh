@@ -95,8 +95,7 @@ function run_its {
 
 # Usage: latest_green
 function latest_green {
-  # TEMP
-  curl -sSL http://code-story-blog.appspot.com/
+  curl -sSL http://sonarsource-979.appspot.com/sonarqube/latestGreen
 }
 
 ## Database CI ##
