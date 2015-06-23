@@ -65,6 +65,9 @@ function run_its {
     VERSION="DEV"
 
     build_green "SonarSource/sonarqube" "master"
+
+    # TEMP
+    build_green "SonarSource/sonar-java" "master"
   else
     VERSION="5.1.1"
 
