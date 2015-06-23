@@ -56,27 +56,25 @@ function build_green {
   unset LAST_GREEN
 }
 
-# Usage: run_its "SONAR_VERSION"
+# Usage: run_its "SONAR_VERSION" ["DEP1"] ["DEP2"]
 function run_its {
   reset_ruby
   install_jars
+
+  for DEP in "${@:2}"; do
+    build_green "$DEP" "master"
+  done
 
   if [ "$1" == "IT-DEV" ]; then
     VERSION="DEV"
 
     build_green "SonarSource/sonarqube" "master"
-
-    # TEMP
-    build_green "SonarSource/sonar-java" "master"
   else
     VERSION="5.1.1"
 
     echo "Downloading latest SonarQube release [$1]..."
     mkdir -p ~/.m2/repository/org/codehaus/sonar/sonar-application/$VERSION
     curl -sSL http://downloads.sonarsource.com/sonarqube/sonarqube-$VERSION.zip -o ~/.m2/repository/org/codehaus/sonar/sonar-application/$VERSION/sonar-application-$VERSION.zip
-
-    # TEMP
-    build_green "SonarSource/sonar-java" "master"
   fi
 
   cd its/plugin
