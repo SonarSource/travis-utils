@@ -42,11 +42,16 @@ function build_sha1 {
 
 # Usage: build_green_sonarqube_snapshot
 function build_green_sonarqube_snapshot {
-  echo "Fetch and build latest green snapshot of SonarQube"
+  build_green "SonarSource/sonarqube" "master"
+}
 
-  LAST_GREEN=$(latest_green "SonarSource/sonarqube" "master")
+# Usage: build_green "user/project" "branch"
+function build_green {
+  echo "Fetch and build latest green snapshot of [$1:$2]"
 
-  build_sha1 "/tmp/sonarqube_master" "SonarSource/sonarqube" "$LAST_GREEN" "mvn install -DskipTests -Pdev"
+  LAST_GREEN=$(latest_green "$1")
+
+  build_sha1 "/tmp/sonarqube_$2" "$1" "$LAST_GREEN" "mvn install -DskipTests -Pdev"
 
   unset LAST_GREEN
 }
@@ -59,7 +64,7 @@ function run_its {
   if [ "$1" == "IT-DEV" ]; then
     VERSION="DEV"
 
-    build_green_sonarqube_snapshot
+    build_green "SonarSource/sonarqube" "master"
   else
     VERSION="5.1.1"
 
@@ -75,9 +80,9 @@ function run_its {
   unset VERSION
 }
 
-# Usage: latest_green
+# Usage: latest_green "user/project"
 function latest_green {
-  curl -sSL http://sonarsource-979.appspot.com/sonarqube/latestGreen
+  curl -sSL http://sonarsource-979.appspot.com/$1/latestGreen
 }
 
 ## Database CI ##
