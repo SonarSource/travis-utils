@@ -40,17 +40,6 @@ function build_sha1 {
   unset SHA1
 }
 
-# Usage: create_orchestrator_properties
-function create_orchestrator_properties {
-  PROPERTIES=/tmp/orchestrator.properties
-
-  echo "sonar.jdbc.dialect=embedded" > $PROPERTIES
-  echo "orchestrator.updateCenterUrl=http://update.sonarsource.org/update-center-dev.properties" >> $PROPERTIES
-  echo "maven.localRepository=${HOME}/.m2/repository" >> $PROPERTIES
-
-  unset PROPERTIES
-}
-
 # Usage: build_green_sonarqube_snapshot
 function build_green_sonarqube_snapshot {
   echo "Fetch and build latest green snapshot of SonarQube"
@@ -80,15 +69,8 @@ function run_its {
     curl -sSL http://downloads.sonarsource.com/sonarqube/sonarqube-$VERSION.zip -o ~/.m2/repository/org/codehaus/sonar/sonar-application/$VERSION/sonar-application-$VERSION.zip
   fi
 
-  create_orchestrator_properties
-
   cd its/plugin
-  mvn \
-    -Dmaven.test.redirectTestOutputToFile=false \
-    -DjavaVersion=DEV \
-    -Dsonar.runtimeVersion="$VERSION" \
-    -Dorchestrator.configUrl=file:///tmp/orchestrator.properties \
-    install
+  mvn -Dmaven.test.redirectTestOutputToFile=false -Dsonar.runtimeVersion="$VERSION" install
 
   unset VERSION
 }
