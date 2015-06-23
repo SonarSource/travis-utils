@@ -72,9 +72,11 @@ function run_its {
     VERSION="5.1.1"
 
     echo "Downloading latest SonarQube release [$1]..."
-
     mkdir -p ~/.m2/repository/org/codehaus/sonar/sonar-application/$VERSION
     curl -sSL http://downloads.sonarsource.com/sonarqube/sonarqube-$VERSION.zip -o ~/.m2/repository/org/codehaus/sonar/sonar-application/$VERSION/sonar-application-$VERSION.zip
+
+    # TEMP
+    build_green "SonarSource/sonar-java" "master"
   fi
 
   cd its/plugin
