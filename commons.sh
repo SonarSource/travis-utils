@@ -78,7 +78,7 @@ function run_its {
   fi
 
   cd its/plugin
-  mvn -Dmaven.test.redirectTestOutputToFile=false -Dsonar.runtimeVersion="$VERSION" install
+  mvn -T2 -Dmaven.test.redirectTestOutputToFile=false -Dsonar.runtimeVersion="$VERSION" install
 
   unset VERSION
 }
