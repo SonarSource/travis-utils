@@ -83,12 +83,24 @@ function run_its {
   unset VERSION
 }
 
+# Usage: start_xvfb
+function start_xvfb {
+  export DISPLAY=:99.0
+  sh -e /etc/init.d/xvfb start
+}
+
+# Usage: sonarqube_its "category"
+function sonarqube_its {
+  reset_ruby
+  start_xvfb
+
+  mvn install -Pit -DskipTests -Dsonar.runtimeVersion=DEV -Dorchestrator.configUrl=file://$(pwd)/it/orchestrator.properties -Dcategory="$1"
+}
+
 # Usage: latest_green "user/project"
 function latest_green {
   curl -sSL http://sonarsource-979.appspot.com/$1/latestGreen
 }
-
-## Database CI ##
 
 # Usage: runDatabaseCI "database" "jdbc_url" "login" "pwd"
 function runDatabaseCI {
