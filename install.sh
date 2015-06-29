@@ -21,3 +21,4 @@ mkdir -p ~/.local/bin
 install_script "build_green_sonarqube_snapshot"
 install_script "run_its"
 install_script "runDatabaseCI"
+install_script "install_jars"
