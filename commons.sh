@@ -61,8 +61,14 @@ function run_its {
   reset_ruby
   install_jars
 
-  for DEP in "${@:2}"; do
-    build_green "$DEP" "master"
+  # Build dependencies and collect options
+  OPTIONS=""
+  for PARAM in "${@:2}"; do
+    if [ "${PARAM:0:1}" != '-' ]; then
+      build_green "$PARAM" "master"
+    else
+      OPTIONS="$OPTIONS $PARAM"
+    fi
   done
 
   if [ "$1" == "IT-DEV" ]; then
@@ -78,7 +84,7 @@ function run_its {
   fi
 
   cd its/plugin
-  mvn -Dmaven.test.redirectTestOutputToFile=false -Dsonar.runtimeVersion="$VERSION" install
+  mvn -Dmaven.test.redirectTestOutputToFile=false -Dsonar.runtimeVersion="$VERSION" test $OPTIONS
 
   unset VERSION
 }
