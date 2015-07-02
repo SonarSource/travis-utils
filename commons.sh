@@ -98,6 +98,7 @@ function start_xvfb {
 # Usage: sonarqube_its "category"
 function sonarqube_its {
   reset_ruby
+  install_jars
   start_xvfb
 
   mvn install -Pit -DskipTests -Dsonar.runtimeVersion=DEV -Dorchestrator.configUrl=file://$(pwd)/it/orchestrator.properties -Dcategory="$1"
