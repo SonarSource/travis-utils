@@ -112,7 +112,7 @@ function latest_green {
 # Usage: runDatabaseCI "database" "jdbc_url" "login" "pwd"
 function runDatabaseCI {
   # Build current version of SonarQube (Don't create a zip)
-  mvn install -DskipTests -Pdev -Dassembly.format=dir -Dchecksum.failOnError=false
+  mvn install -DskipTests -Pdev -Dassembly.format=dir -Dchecksum.failOnError=false -T2 -Dsource.skip=true
 
   # Start server
   reset_ruby
