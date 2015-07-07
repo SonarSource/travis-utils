@@ -101,7 +101,7 @@ function sonarqube_its {
   install_jars
   start_xvfb
 
-  mvn install -Pit -DskipTests -Dsonar.runtimeVersion=DEV -Dorchestrator.configUrl=file://$(pwd)/it/orchestrator.properties -Dcategory="$1"
+  mvn install -Pit,dev -DskipTests -Dsonar.runtimeVersion=DEV -Dorchestrator.configUrl=file://$(pwd)/it/orchestrator.properties -Dcategory="$1"
 }
 
 # Usage: latest_green "user/project"
