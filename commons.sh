@@ -137,8 +137,8 @@ function runDatabaseCI {
 
       # Run the tests
       install_jars
-      cd ../../..
-      mvn -PdbTests package -Dsonar.jdbc.dialect=$1 -Dsonar.jdbc.url=$2 -Dsonar.jdbc.username=$3 -Dsonar.jdbc.password=${4:-}
+      cd ../../../..
+      mvn package -pl :sonar-db -am -PdbTests -Dsonar.jdbc.dialect=$1 -Dsonar.jdbc.url=$2 -Dsonar.jdbc.username=$3 -Dsonar.jdbc.password=${4:-} -V
       exit $?
     fi
 
