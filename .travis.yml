@@ -9,8 +9,8 @@ install: true
 script: ./travis.sh
 env:
   - TESTS=SONARQUBE_SNAPSHOT
-  - TESTS=RUN_ITS_DEV
-  - TESTS=RUN_ITS_LATEST
+  - TESTS=RUN_PLUGIN_ITS_DEV
+  - TESTS=RUN_PLUGIN_ITS_LATEST
 
 cache:
   directories:

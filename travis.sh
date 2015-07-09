@@ -11,16 +11,16 @@ SONARQUBE_SNAPSHOT)
   travis_build_green_sonarqube_snapshot
   ;;
 
-RUN_ITS_DEV)
+RUN_PLUGIN_ITS_DEV)
   echo "Run ITs on DEV version"
   cp -r test/its its
-  travis_run_its "IT-DEV"
+  travis_run_plugin_its "IT-DEV"
   ;;
 
-RUN_ITS_LATEST)
+RUN_PLUGIN_ITS_LATEST)
 echo "Run ITs on LATEST version"
   cp -r test/its its
-  travis_run_its "IT-LATEST"
+  travis_run_plugin_its "IT-LATEST"
   ;;
 
 *)
