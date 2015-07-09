@@ -84,7 +84,7 @@ function run_plugin_its {
   fi
 
   cd "$1"
-  mvn -Dmaven.test.redirectTestOutputToFile=false -Dsonar.runtimeVersion="SONAR_VERSION" test $OPTIONS
+  mvn -Dmaven.test.redirectTestOutputToFile=false -Dsonar.runtimeVersion="SONAR_VERSION" install $OPTIONS
 
   unset VERSION
 }
