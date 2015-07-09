@@ -84,7 +84,7 @@ function run_its_in_folder {
   fi
 
   cd "$1"
-  mvn -Dmaven.test.redirectTestOutputToFile=false -Dsonar.runtimeVersion="SONAR_VERSION" install $OPTIONS
+  mvn -Dmaven.test.redirectTestOutputToFile=false -Dsonar.runtimeVersion="$VERSION" install $OPTIONS
 
   unset VERSION
 }
