@@ -56,8 +56,8 @@ function build_green {
   unset LAST_GREEN
 }
 
-# Usage: run_plugin_its "FOLDER" "SONAR_VERSION" ["DEP1"] ["DEP2"]
-function run_plugin_its {
+# Usage: run_its_in_folder "FOLDER" "SONAR_VERSION" ["DEP1"] ["DEP2"]
+function run_its_in_folder {
   reset_ruby
   install_jars
 
@@ -93,7 +93,7 @@ function run_plugin_its {
 # Usage: run_its "SONAR_VERSION" ["DEP1"] ["DEP2"]
 function run_its {
 	echo "run_its is deprecated"
-	run_plugin_its "$@"
+  run_its_in_folder "its/plugin" "$@"
 }
 
 # Usage: run_plugin_its "SONAR_VERSION" ["DEP1"] ["DEP2"]
