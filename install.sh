@@ -14,7 +14,7 @@ mkdir -p $TRAVIS_UTILS_HOME
 if [ "${1:-}" == "LOCAL" ]; then
   cp -R . $TRAVIS_UTILS_HOME
 else
-  curl -sSL https://github.com/sonarsource/travis-utils/tarball/v7 | tar zx --strip-components 1 -C $TRAVIS_UTILS_HOME
+  curl -sSL https://github.com/sonarsource/travis-utils/tarball/master | tar zx --strip-components 1 -C $TRAVIS_UTILS_HOME
 fi
 
 mkdir -p ~/.local/bin
