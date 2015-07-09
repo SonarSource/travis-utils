@@ -56,14 +56,14 @@ function build_green {
   unset LAST_GREEN
 }
 
-# Usage: run_its "SONAR_VERSION" ["DEP1"] ["DEP2"]
-function run_its {
+# Usage: run_plugin_its "FOLDER" "SONAR_VERSION" ["DEP1"] ["DEP2"]
+function run_plugin_its {
   reset_ruby
   install_jars
 
   # Build dependencies and collect options
   OPTIONS=""
-  for PARAM in "${@:2}"; do
+  for PARAM in "${@:3}"; do
     if [ "${PARAM:0:1}" != '-' ]; then
       build_green "$PARAM" "master"
     else
@@ -71,22 +71,39 @@ function run_its {
     fi
   done
 
-  if [ "$1" == "IT-DEV" ]; then
+  if [ "$2" == "IT-DEV" ]; then
     VERSION="DEV"
 
     build_green "SonarSource/sonarqube" "master"
   else
     VERSION="5.1.1"
 
-    echo "Downloading latest SonarQube release [$1]..."
+    echo "Downloading latest SonarQube release [$2]..."
     mkdir -p ~/.m2/repository/org/codehaus/sonar/sonar-application/$VERSION
     curl -sSL http://downloads.sonarsource.com/sonarqube/sonarqube-$VERSION.zip -o ~/.m2/repository/org/codehaus/sonar/sonar-application/$VERSION/sonar-application-$VERSION.zip
   fi
 
-  cd its/plugin
-  mvn -Dmaven.test.redirectTestOutputToFile=false -Dsonar.runtimeVersion="$VERSION" test $OPTIONS
+  cd "$1"
+  mvn -Dmaven.test.redirectTestOutputToFile=false -Dsonar.runtimeVersion="SONAR_VERSION" test $OPTIONS
 
   unset VERSION
+}
+
+# Deprecated
+# Usage: run_its "SONAR_VERSION" ["DEP1"] ["DEP2"]
+function run_its {
+	echo "run_its is deprecated"
+	run_plugin_its "$@"
+}
+
+# Usage: run_plugin_its "SONAR_VERSION" ["DEP1"] ["DEP2"]
+function run_plugin_its {
+	run_its_in_folder "its/plugin" "$@"
+}
+
+# Usage: run_ruling_its "SONAR_VERSION" ["DEP1"] ["DEP2"]
+function run_ruling_its {
+	run_its_in_folder "its/ruling" "$@"
 }
 
 # Usage: start_xvfb

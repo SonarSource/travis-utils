@@ -19,10 +19,13 @@ fi
 
 mkdir -p ~/.local/bin
 install_script "build_green_sonarqube_snapshot"
-install_script "run_its"
+install_script "run_plugin_its"
+install_script "run_ruling_its"
 install_script "runDatabaseCI"
 install_script "install_jars"
 install_script "sonarqube_its"
 install_script "build_green"
 install_script "start_xvfb"
 install_script "reset_ruby"
+# Deprecated
+install_script "run_its"
