@@ -51,6 +51,13 @@ function build_green {
   unset LAST_GREEN
 }
 
+# Usage: download_sonarqube_release "VERSION"
+function download_sonarqube_release {
+  echo "Downloading latest SonarQube release [$VERSION]..."
+  mkdir -p ~/.m2/repository/org/codehaus/sonar/sonar-application/$VERSION
+  curl -sSL http://downloads.sonarsource.com/sonarqube/sonarqube-$VERSION.zip -o ~/.m2/repository/org/codehaus/sonar/sonar-application/$VERSION/sonar-application-$VERSION.zip
+}
+
 # Usage: run_its_in_folder "FOLDER" "SONAR_VERSION" ["DEP1"] ["DEP2"]
 function run_its_in_folder {
   # Build dependencies and collect options
@@ -69,33 +76,13 @@ function run_its_in_folder {
     build_green "SonarSource/sonarqube" "master"
   else
     VERSION="5.1.1"
-
-    echo "Downloading latest SonarQube release [$2]..."
-    mkdir -p ~/.m2/repository/org/codehaus/sonar/sonar-application/$VERSION
-    curl -sSL http://downloads.sonarsource.com/sonarqube/sonarqube-$VERSION.zip -o ~/.m2/repository/org/codehaus/sonar/sonar-application/$VERSION/sonar-application-$VERSION.zip
+		download_sonarqube_release "$VERSION"
   fi
 
   cd "$1"
   mvn -Dmaven.test.redirectTestOutputToFile=false -Dsonar.runtimeVersion="$VERSION" install $OPTIONS
 
   unset VERSION
-}
-
-# Deprecated
-# Usage: run_its "SONAR_VERSION" ["DEP1"] ["DEP2"]
-function run_its {
-	echo "run_its is deprecated"
-  run_its_in_folder "its/plugin" "$@"
-}
-
-# Usage: run_plugin_its "SONAR_VERSION" ["DEP1"] ["DEP2"]
-function run_plugin_its {
-	run_its_in_folder "its/plugin" "$@"
-}
-
-# Usage: run_ruling_its "SONAR_VERSION" ["DEP1"] ["DEP2"]
-function run_ruling_its {
-	run_its_in_folder "its/ruling" "$@"
 }
 
 # Usage: start_xvfb

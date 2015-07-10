@@ -27,6 +27,7 @@ install_script "sonarqube_its"
 install_script "build_green"
 install_script "start_xvfb"
 install_script "build"
+install_script "download_sonarqube_release"
 
 # Complete the installation
 
