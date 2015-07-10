@@ -36,4 +36,4 @@ mkdir -p ~/.m2/repository
 cp -r /tmp/travis-utils/m2repo/* ~/.m2/repository
 
 echo "Install orchestrator properties"
-export ORCHESTRATOR_CONFIG_URL=$TRAVIS_UTILS_HOME/orchestrator.properties
+export ORCHESTRATOR_CONFIG_URL="$TRAVIS_UTILS_HOME/orchestrator.properties"
