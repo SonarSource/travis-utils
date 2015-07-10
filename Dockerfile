@@ -11,4 +11,4 @@ ENV PATH ~/.local/bin:$PATH
 WORKDIR /root
 CMD ["./travis.sh"]
 
-ADD . /root/
+ADD . ./
