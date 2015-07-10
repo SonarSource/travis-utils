@@ -7,14 +7,6 @@ source /tmp/travis-utils/env.sh
 
 case "$TESTS" in
 
-
-  install_script "runDatabaseCI"
-  install_script "sonarqube_its"
-  install_script "build_green"
-  install_script "start_xvfb"
-  install_script "build"
-  install_script "download_sonarqube_release"
-
 SONARQUBE_SNAPSHOT)
   echo "Build sonarqube Green Snapshot"
   travis_build_green "SonarSource/sonarqube" "master"
