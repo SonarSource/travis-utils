@@ -14,7 +14,12 @@ function install_jars {
 # Usage: fetch "directory" "user/project" "branch"
 function fetch {
   mkdir -p $1
-  curl -ssL https://github.com/$2/tarball/$3 | tar zx --strip-components 1 -C $1
+
+  if [ "${GITHUB_TOKEN:-}" == "" ]; then
+    curl -ssL https://github.com/$2/tarball/$3 | tar zx --strip-components 1 -C $1
+  else
+    curl -u dgageot:$GITHUB_TOKEN -ssL https://github.com/$2/tarball/$3 | tar zx --strip-components 1 -C $1
+  fi
 }
 
 # Usage build_sha1 "directory" "user/project" "sha1" "build command"
