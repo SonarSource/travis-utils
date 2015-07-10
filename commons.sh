@@ -49,8 +49,8 @@ function build_green {
 # Usage: download_sonarqube_release "VERSION"
 function download_sonarqube_release {
   echo "Downloading latest SonarQube release [$VERSION]..."
-  mkdir -p ~/.m2/repository/org/codehaus/sonar/sonar-application/$VERSION
-  curl -sSL http://downloads.sonarsource.com/sonarqube/sonarqube-$VERSION.zip -o ~/.m2/repository/org/codehaus/sonar/sonar-application/$VERSION/sonar-application-$VERSION.zip
+  mkdir -p ~/.m2/repository/org/codehaus/sonar/sonar-application/$1
+  curl -sSL http://downloads.sonarsource.com/sonarqube/sonarqube-$1.zip -o ~/.m2/repository/org/codehaus/sonar/sonar-application/$1/sonar-application-$1.zip
 }
 
 # Usage: start_xvfb
