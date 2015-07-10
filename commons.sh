@@ -1,16 +1,5 @@
 #!/bin/bash
 
-function reset_ruby {
-  unset GEM_PATH GEM_HOME RAILS_ENV
-}
-
-function install_jars {
-  echo "Install jars into local maven repository"
-
-  mkdir -p ~/.m2/repository
-  cp -r /tmp/travis-utils/m2repo/* ~/.m2/repository
-}
-
 # Usage: fetch "directory" "user/project" "branch"
 function fetch {
   mkdir -p $1
@@ -64,9 +53,6 @@ function build_green {
 
 # Usage: run_its_in_folder "FOLDER" "SONAR_VERSION" ["DEP1"] ["DEP2"]
 function run_its_in_folder {
-  reset_ruby
-  install_jars
-
   # Build dependencies and collect options
   OPTIONS=""
   for PARAM in "${@:3}"; do
@@ -120,8 +106,6 @@ function start_xvfb {
 
 # Usage: sonarqube_its "category"
 function sonarqube_its {
-  reset_ruby
-  install_jars
   start_xvfb
 
   mvn install -Pit,dev -DskipTests -Dsonar.runtimeVersion=DEV -Dorchestrator.configUrl=file://$(pwd)/it/orchestrator.properties -Dcategory="$1"
@@ -138,7 +122,6 @@ function runDatabaseCI {
   mvn install -DskipTests -Pdev -Dassembly.format=dir -Dchecksum.failOnError=false -T2 -Dsource.skip=true
 
   # Start server
-  reset_ruby
   cd sonar-application/target/sonarqube-*/sonarqube-*
   (exec java -jar lib/sonar-application-*.jar \
     -Dsonar.log.console=true \
@@ -159,7 +142,6 @@ function runDatabaseCI {
       kill -9 $pid
 
       # Run the tests
-      install_jars
       cd ../../../..
       mvn package -pl :sonar-db -am -PdbTests -Dsonar.jdbc.dialect=$1 -Dsonar.jdbc.url=$2 -Dsonar.jdbc.username=$3 -Dsonar.jdbc.password=${4:-} -V
       exit $?

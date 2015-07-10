@@ -17,16 +17,23 @@ else
   curl -sSL https://github.com/sonarsource/travis-utils/tarball/master | tar zx --strip-components 1 -C $TRAVIS_UTILS_HOME
 fi
 
+# Create shortcuts that are in the PATH
 mkdir -p ~/.local/bin
 install_script "build_green_sonarqube_snapshot"
 install_script "run_plugin_its"
 install_script "run_ruling_its"
 install_script "runDatabaseCI"
-install_script "install_jars"
 install_script "sonarqube_its"
 install_script "build_green"
 install_script "start_xvfb"
-install_script "reset_ruby"
 install_script "build"
-# Deprecated
-install_script "run_its"
+
+# Complete the installation
+
+echo "Make sure no ruby variable is set"
+unset GEM_PATH GEM_HOME RAILS_ENV
+
+echo "Install jars into local maven repository"
+mkdir -p ~/.m2/repository
+cp -r /tmp/travis-utils/m2repo/* ~/.m2/repository
+
