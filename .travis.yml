@@ -3,15 +3,12 @@ sudo: false
 
 jdk:
   - oraclejdk7
-  - oraclejdk8
 
 install: true
 script: ./travis.sh
 env:
   - TESTS=SONARQUBE_SNAPSHOT
   - TESTS=SONAR_CPP_SNAPSHOT
-  - TESTS=RUN_PLUGIN_ITS_DEV
-  - TESTS=RUN_PLUGIN_ITS_LATEST
 
 cache:
   directories:
