@@ -19,9 +19,6 @@ fi
 
 # Create shortcuts that are in the PATH
 mkdir -p ~/.local/bin
-install_script "build_green_sonarqube_snapshot"
-install_script "run_plugin_its"
-install_script "run_ruling_its"
 install_script "runDatabaseCI"
 install_script "sonarqube_its"
 install_script "build_green"

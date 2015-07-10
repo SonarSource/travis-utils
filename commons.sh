@@ -35,11 +35,6 @@ function build {
   unset SHA1 DIRECTORY
 }
 
-# Usage: build_green_sonarqube_snapshot
-function build_green_sonarqube_snapshot {
-  build_green "SonarSource/sonarqube" "master"
-}
-
 # Usage: build_green "user/project" "branch"
 function build_green {
   echo "Fetch and build latest green snapshot of [$1:$2]"
@@ -56,33 +51,6 @@ function download_sonarqube_release {
   echo "Downloading latest SonarQube release [$VERSION]..."
   mkdir -p ~/.m2/repository/org/codehaus/sonar/sonar-application/$VERSION
   curl -sSL http://downloads.sonarsource.com/sonarqube/sonarqube-$VERSION.zip -o ~/.m2/repository/org/codehaus/sonar/sonar-application/$VERSION/sonar-application-$VERSION.zip
-}
-
-# Usage: run_its_in_folder "FOLDER" "SONAR_VERSION" ["DEP1"] ["DEP2"]
-function run_its_in_folder {
-  # Build dependencies and collect options
-  OPTIONS=""
-  for PARAM in "${@:3}"; do
-    if [ "${PARAM:0:1}" != '-' ]; then
-      build_green "$PARAM" "master"
-    else
-      OPTIONS="$OPTIONS $PARAM"
-    fi
-  done
-
-  if [ "$2" == "IT-DEV" ]; then
-    VERSION="DEV"
-
-    build_green "SonarSource/sonarqube" "master"
-  else
-    VERSION="5.1.1"
-		download_sonarqube_release "$VERSION"
-  fi
-
-  cd "$1"
-  mvn -Dmaven.test.redirectTestOutputToFile=false -Dsonar.runtimeVersion="$VERSION" install $OPTIONS
-
-  unset VERSION
 }
 
 # Usage: start_xvfb
