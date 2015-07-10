@@ -7,7 +7,7 @@ function fetch {
   if [ "${GITHUB_TOKEN:-}" == "" ]; then
     curl -ssL https://github.com/$2/tarball/$3 | tar zx --strip-components 1 -C $1
   else
-    curl -u dgageot:$GITHUB_TOKEN -ssL https://github.com/$2/tarball/$3 | tar zx --strip-components 1 -C $1
+    curl -ssL https://$GITHUB_TOKEN@github.com/$2/tarball/$3 | tar zx --strip-components 1 -C $1
   fi
 }
 
