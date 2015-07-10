@@ -28,9 +28,6 @@ install_script "download_sonarqube_release"
 
 # Complete the installation
 
-echo "Make sure no ruby variable is set"
-unset GEM_PATH GEM_HOME RAILS_ENV
-
 echo "Install jars into local maven repository"
 mkdir -p ~/.m2/repository
 cp -r /tmp/travis-utils/m2repo/* ~/.m2/repository
