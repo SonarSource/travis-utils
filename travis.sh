@@ -7,8 +7,15 @@ set -euo pipefail
 case "$TESTS" in
 
 SONARQUBE_SNAPSHOT)
-  echo "Build SonarQube Green Snapshot"
+  echo "Build sonarqube Green Snapshot"
   travis_build_green_sonarqube_snapshot
+  ;;
+
+SONAR_CPP_SNAPSHOT)
+  echo "Build sonar-cpp Green Snapshot"
+  travis_install_jars
+  travis_build "SonarSource/sonar-license" "2.9"
+  travis_build_green "SonarSource/sonar-cpp" "master"
   ;;
 
 RUN_PLUGIN_ITS_DEV)

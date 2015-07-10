@@ -27,5 +27,6 @@ install_script "sonarqube_its"
 install_script "build_green"
 install_script "start_xvfb"
 install_script "reset_ruby"
+install_script "build"
 # Deprecated
 install_script "run_its"

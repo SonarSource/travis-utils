@@ -22,19 +22,20 @@ function fetch {
   fi
 }
 
-# Usage build_sha1 "directory" "user/project" "sha1" "build command"
-function build_sha1 {
-  SHA1=$3
+# Usage build "user/project" "sha1"
+function build {
+  SHA1=$2
+  DIRECTORY="/tmp/$1/$2"
 
-  if [ -f "$HOME/.m2/repository/$2/$SHA1" ]; then
-    echo "Project [$2] with sha1 [$SHA1] is already on cache"
+  if [ -f "$HOME/.m2/repository/$1/$SHA1" ]; then
+    echo "Project [$1] with sha1 [$SHA1] is already on cache"
   else
-    echo "Fetch [$2:$SHA1]"
-    fetch $1 $2 $SHA1
+    echo "Fetch [$1:$SHA1]"
+    fetch $DIRECTORY $1 $SHA1
 
-    echo "Build [$2:$SHA1]"
-    cd $1
-    $4
+    echo "Build [$1:$SHA1]"
+    cd $DIRECTORY
+    mvn install -DskipTests -Pdev
     cd -
   fi
 
@@ -42,7 +43,7 @@ function build_sha1 {
   mkdir -p $HOME/.m2/repository/$2
   echo "OK" > $HOME/.m2/repository/$2/$SHA1
 
-  unset SHA1
+  unset SHA1 DIRECTORY
 }
 
 # Usage: build_green_sonarqube_snapshot
@@ -56,7 +57,7 @@ function build_green {
 
   LAST_GREEN=$(latest_green "$1")
 
-  build_sha1 "/tmp/sonarqube_$2" "$1" "$LAST_GREEN" "mvn install -DskipTests -Pdev"
+  build "$1" "$LAST_GREEN"
 
   unset LAST_GREEN
 }
