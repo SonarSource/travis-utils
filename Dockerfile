@@ -17,6 +17,7 @@ RUN (curl -SL http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/31.0/linux
 
 
 ENV TESTS SONARQUBE_SNAPSHOT
+ENV RAILS_ENV test
 ENV PATH ~/.local/bin:$PATH
 
 WORKDIR /root
