@@ -15,6 +15,12 @@ RUN ln -s /usr/bin/nodejs /usr/bin/node
 RUN (curl -SL http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/31.0/linux-x86_64/en-US/firefox-31.0.tar.bz2 | tar xj -C /opt) \
 	&& ln -sf /opt/firefox/firefox /usr/bin/firefox
 
+# Warmup maven cache with Sonarqube
+RUN mkdir /tmp/sonarqube \
+	&& cd /tmp/sonarqube \
+	&& curl -sSL https://github.com/SonarSource/sonarqube/tarball/5.1.1 | tar zx --strip-components 1 \
+	&& mvn install -Pdev -DskipTests \
+	&& rm -Rf /tmp/sonarqube
 
 ENV TESTS SONARQUBE_SNAPSHOT
 ENV RAILS_ENV test
