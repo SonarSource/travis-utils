@@ -19,7 +19,6 @@ function install_script() {
 
 mkdir -p ~/.local/bin
 install_script "runDatabaseCI"
-install_script "sonarqube_its"
 install_script "build_green"
 install_script "start_xvfb"
 install_script "build"

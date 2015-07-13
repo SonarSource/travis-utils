@@ -26,11 +26,11 @@ function build {
     cd $DIRECTORY
     mvn install -DskipTests -Pdev
     cd -
-  fi
 
-  rm -Rf $HOME/.m2/repository/$2
-  mkdir -p $HOME/.m2/repository/$2
-  echo "OK" > $HOME/.m2/repository/$2/$SHA1
+    rm -Rf $HOME/.m2/repository/$2
+    mkdir -p $HOME/.m2/repository/$2
+    echo "OK" > $HOME/.m2/repository/$2/$SHA1
+  fi
 
   unset SHA1 DIRECTORY
 }
@@ -39,11 +39,11 @@ function build {
 function build_green {
   echo "Fetch and build latest green snapshot of [$1:$2]"
 
-  LAST_GREEN=$(latest_green "$1")
+  LAST_GREEN_SHA1=$(curl -sSL http://sonarsource-979.appspot.com/$1/latestGreen)
 
-  build "$1" "$LAST_GREEN"
+  build "$1" "$LAST_GREEN_SHA1"
 
-  unset LAST_GREEN
+  unset LAST_GREEN_SHA1
 }
 
 # Usage: download_sonarqube_release "VERSION"
@@ -57,18 +57,6 @@ function download_sonarqube_release {
 function start_xvfb {
   export DISPLAY=:99.0
   /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16
-}
-
-# Usage: sonarqube_its "category"
-function sonarqube_its {
-  start_xvfb
-
-  mvn install -Pit,dev -DskipTests -Dsonar.runtimeVersion=DEV -Dorchestrator.configUrl=file://$(pwd)/it/orchestrator.properties -Dcategory="$1"
-}
-
-# Usage: latest_green "user/project"
-function latest_green {
-  curl -sSL http://sonarsource-979.appspot.com/$1/latestGreen
 }
 
 # Usage: runDatabaseCI "database" "jdbc_url" "login" "pwd"
