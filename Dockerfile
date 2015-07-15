@@ -23,6 +23,8 @@ RUN mkdir /tmp/sonarqube \
 	&& rm -Rf /tmp/sonarqube
 
 ENV TESTS SONARQUBE_SNAPSHOT
+ENV CI true
+ENV TRAVIS true
 ENV RAILS_ENV test
 ENV PATH ~/.local/bin:$PATH
 
