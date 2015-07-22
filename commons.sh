@@ -27,9 +27,9 @@ function build {
     mvn install -DskipTests -Pdev
     cd -
 
-    rm -Rf $HOME/.m2/repository/$2
-    mkdir -p $HOME/.m2/repository/$2
-    echo "OK" > $HOME/.m2/repository/$2/$SHA1
+    rm -Rf $HOME/.m2/repository/$1
+    mkdir -p $HOME/.m2/repository/$1
+    echo "OK" > $HOME/.m2/repository/$1/$SHA1
   fi
 
   unset SHA1 DIRECTORY
