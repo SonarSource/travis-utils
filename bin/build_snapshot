@@ -1,0 +1,10 @@
+#!/bin/bash
+# Usage: build_snapshot "user/project"
+
+PROJECT=$1
+
+echo "Fetch and build latest green snapshot of [$PROJECT]"
+
+LAST_GREEN_SHA1=$(curl -sSL http://sonarsource-979.appspot.com/$PROJECT/latestGreen)
+
+build "$PROJECT" "$LAST_GREEN_SHA1"

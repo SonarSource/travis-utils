@@ -2,24 +2,23 @@
 
 set -euo pipefail
 
-./install.sh "LOCAL"
-source /tmp/travis-utils/env.sh
+function installTravisTools {
+  mkdir ~/.local
+  curl -sSL https://github.com/SonarSource/travis-utils/tarball/$TRAVIS_COMMIT | tar zx --strip-components 1 -C ~/.local
+  source ~/.local/bin/install
+}
+
+installTravisTools
 
 case "$TESTS" in
 
 SONARQUBE_SNAPSHOT)
-  echo "Build sonarqube Green Snapshot"
-  travis_build_green "SonarSource/sonarqube" "master"
+  build_snapshot "SonarSource/sonarqube"
   ;;
 
 SONAR_CPP_SNAPSHOT)
-  echo "Build sonar-cpp Green Snapshot"
-  travis_build "SonarSource/sonar-license" "2.9"
-  travis_build_green "SonarSource/sonar-cpp" "master"
+  build "SonarSource/sonar-license" "2.9"
+  build_snapshot "SonarSource/sonar-cpp"
   ;;
-
-*)
-  echo "Invalid TESTS choice [$TESTS]"
-  exit 1
 
 esac

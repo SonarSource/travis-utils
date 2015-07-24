@@ -1,0 +1,10 @@
+#!/bin/bash
+# Usage: fetch "directory" "user/project" "branch"
+
+mkdir -p $1
+
+if [ "${GITHUB_TOKEN:-}" == "" ]; then
+  curl -sSL https://github.com/$2/tarball/$3 | tar zx --strip-components 1 -C $1
+else
+  curl -sSL https://$GITHUB_TOKEN@github.com/$2/tarball/$3 | tar zx --strip-components 1 -C $1
+fi

@@ -27,6 +27,7 @@ ENV CI true
 ENV TRAVIS true
 ENV RAILS_ENV test
 ENV PATH ~/.local/bin:$PATH
+ENV TRAVIS_COMMIT master
 
 WORKDIR /root
 CMD ["./travis.sh"]

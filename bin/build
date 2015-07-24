@@ -1,0 +1,22 @@
+#!/bin/bash
+# Usage build "user/project" "sha1"
+
+PROJECT=$1
+SHA1=$2
+DIRECTORY="/tmp/$PROJECT/$SHA1"
+
+if [ -f "$HOME/.m2/repository/$PROJECT/$SHA1" ]; then
+  echo "Project [$PROJECT] with sha1 [$SHA1] is already on cache"
+else
+  echo "Fetch [$PROJECT:$SHA1]"
+  fetch $DIRECTORY $PROJECT $SHA1
+
+  echo "Build [$PROJECT:$SHA1]"
+  cd $DIRECTORY
+  mvn install -DskipTests -Pdev
+  cd -
+
+  rm -Rf $HOME/.m2/repository/$PROJECT
+  mkdir -p $HOME/.m2/repository/$PROJECT
+  echo "OK" > $HOME/.m2/repository/$PROJECT/$SHA1
+fi

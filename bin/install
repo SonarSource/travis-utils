@@ -1,0 +1,11 @@
+#!/bin/bash
+
+unset GEM_PATH GEM_HOME RAILS_ENV
+
+export TRAVIS_UTILS_HOME=$HOME/.local
+export ORCHESTRATOR_CONFIG_URL="file://$TRAVIS_UTILS_HOME/orchestrator.properties"
+export DISPLAY=:99.0
+
+echo "Install jars into local maven repository"
+mkdir -p ~/.m2/repository
+cp -r $TRAVIS_UTILS_HOME/m2repo/* ~/.m2/repository
