@@ -1,6 +1,8 @@
 #!/bin/bash
 # Usage: build_snapshot "user/project"
 
+set -euo pipefail
+
 PROJECT=$1
 
 echo "Fetch and build latest green snapshot of [$PROJECT]"

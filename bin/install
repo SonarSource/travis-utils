@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -euo pipefail
+
 unset GEM_PATH GEM_HOME RAILS_ENV
 
 export TRAVIS_UTILS_HOME=$HOME/.local

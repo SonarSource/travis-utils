@@ -1,6 +1,8 @@
 #!/bin/bash
 # Usage build "user/project" "sha1"
 
+set -euo pipefail
+
 PROJECT=$1
 SHA1=$2
 DIRECTORY="/tmp/$PROJECT/$SHA1"

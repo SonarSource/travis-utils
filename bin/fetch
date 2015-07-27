@@ -1,6 +1,8 @@
 #!/bin/bash
 # Usage: fetch "directory" "user/project" "branch"
 
+set -euo pipefail
+
 mkdir -p $1
 
 if [ "${GITHUB_TOKEN:-}" == "" ]; then
