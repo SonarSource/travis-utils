@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# download and unzip Maven 3.3.3 (latest 3.3 version at the moment) to ~/maven directory
+# and overwriteis the mvn command to run this Maven version instead of Travis' standard maven version (3.2.5)
+
+set -euo pipefail
+
+mkdir ~/maven
+curl -sSL http://apache.mirrors.ovh.net/ftp.apache.org/dist/maven/maven-3/3.3.3/binaries/apache-maven-3.3.3-bin.tar.gz | tar zx -C ~/maven
+export M2_HOME=~/maven/apache-maven-3.3.3
+export PATH=$M2_HOME/bin:$PATH
+
