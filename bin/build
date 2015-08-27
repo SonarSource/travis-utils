@@ -20,5 +20,5 @@ else
 
   rm -Rf $HOME/.m2/repository/$PROJECT
   mkdir -p $HOME/.m2/repository/$PROJECT
-  echo "OK" > $HOME/.m2/repository/$PROJECT/$SHA1
+  echo "OK" > $HOME/.m2/repository/$PROJECT/${SHA1////-}
 fi
