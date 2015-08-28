@@ -100,14 +100,13 @@ docker ps -a
 
 # Enter that container with bash
 docker --rm -ti exec [CONTAINER_ID] bash
-
 ```
+
 An easier way of doing this, for beginners, is to start the container with `bash` command instead of `./travis.sh`.
 This way, you can run `./travis.sh` inside the container and at the end of the build you'll still be inside the container, ready to list and view build output.
 
  6. Fix some code
  7. Goto 3. The container needs to be rebuilt before a new run is started.
-  ```
 
 ## Accelerate the build
 
