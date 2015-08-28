@@ -94,52 +94,52 @@ Here are the steps to follow to run a build with Docker:
  2. Create a `Dockerfile` file at the root of the project.
     The file will, most of the time, be as simple as:
 
-```Dockerfile
-FROM dgageot/travis-docker
-```
+    ```Dockerfile
+    FROM dgageot/travis-docker
+    ```
 
  3. Build the docker image. The image will then contain both your sources and
     the whole environment needed to run the tests. (Each time you change the
     sources, you have to re-build the image. First time will be long because
     Docker needs to download the base image. Then it will be very quick.)
 
-```bash
-docker build -t ci .
-```
+    ```bash
+    docker build -t ci .
+    ```
 
  4. Run the build. Most of the time it means running `travis.sh` command with
     the right set of environment variables.
 
-```bash
-docker run -ti -e JOB=CI ci ./travis.sh
-# or
-docker run -ti -e JOB=IT-DEV ci ./travis.sh
-```
+    ```bash
+    docker run -ti -e JOB=CI ci ./travis.sh
+    # or
+    docker run -ti -e JOB=IT-DEV ci ./travis.sh
+    ```
 
  5. If the build is not green, you might want to explore the artefacts left
     after the build. With Docker, it's something common to re-enter a stopped
     container to analyse what failed. You just have to find the id of that
     container that just stopped.
 
-```
-docker ps -a
+    ```
+    docker ps -a
 
-CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS                        PORTS               NAMES
-67ac1c89e8cc        ci                  "./travis.sh"       23 minutes ago      Exited (130) 1 minutes ago                       lonely_shockley
+    CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS                        PORTS               NAMES
+    67ac1c89e8cc        ci                  "./travis.sh"       23 minutes ago      Exited (130) 1 minutes ago                       lonely_shockley
 
-# Re-enter that container with bash
-docker --rm -ti exec [CONTAINER ID] bash
-```
+    # Re-enter that container with bash
+    docker --rm -ti exec [CONTAINER ID] bash
+    ```
 
-An easier way of doing this, for beginners, is to start the container with `bash` command instead of `./travis.sh`.
-This way, you can run `./travis.sh` inside the container and at the end of the build you'll still be inside the container, ready to list and view build output.
+  An easier way of doing this, for beginners, is to start the container with `bash` command instead of `./travis.sh`.
+  This way, you can run `./travis.sh` inside the container and at the end of the build you'll still be inside the container, ready to list and view build output.
 
-```
-docker run -ti -e JOB=CI ci bash
-./travis.sh
-ls target
-exit
-```
+  ```
+  docker run -ti -e JOB=CI ci bash
+  ./travis.sh
+  ls target
+  exit
+  ```
 
  6. Fix some code
  7. Goto 3. The container needs to be rebuilt before a new run is started.
