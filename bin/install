@@ -5,7 +5,6 @@ set -euo pipefail
 unset GEM_PATH GEM_HOME RAILS_ENV
 
 export TRAVIS_UTILS_HOME=$HOME/.local
-export ORCHESTRATOR_CONFIG_URL="file://$TRAVIS_UTILS_HOME/orchestrator.properties"
 export DISPLAY=:99.0
 
 echo "Install jars into local maven repository"
