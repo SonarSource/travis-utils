@@ -17,8 +17,10 @@ SONARQUBE_SNAPSHOT)
   ;;
 
 SONAR_CPP_SNAPSHOT)
-  build "SonarSource/parent" "30"
+  build "SonarSource/parent" "28"
   build "SonarSource/sonar-license" "2.9"
+
+  build "SonarSource/parent" "30"
   build_snapshot "SonarSource/sonar-cpp"
   ;;
 
