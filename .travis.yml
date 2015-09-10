@@ -1,11 +1,9 @@
 language: java
 sudo: false
-
-jdk:
-  - oraclejdk7
-
 install: true
+jdk: oraclejdk7
 script: ./travis.sh
+
 env:
   - TESTS=SONARQUBE_SNAPSHOT
   - TESTS=SONAR_CPP_SNAPSHOT
