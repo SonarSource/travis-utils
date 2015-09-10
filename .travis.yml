@@ -8,9 +8,5 @@ env:
   - TESTS=SONARQUBE_SNAPSHOT
   - TESTS=SONAR_CPP_SNAPSHOT
 
-cache:
-  directories:
-    - '$HOME/.m2/repository'
-
 notifications:
   email: false
