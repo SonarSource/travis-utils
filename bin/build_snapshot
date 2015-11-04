@@ -5,8 +5,9 @@ set -euo pipefail
 
 PROJECT=$1
 
-echo "Fetch and build latest green snapshot of [$PROJECT]"
+echo "Compute HEAD SHA1 of [$PROJECT]"
+HEAD_SHA1=`git ls-remote https://github.com/${PROJECT} HEAD | grep -o '^[a-f0-9]\{40\}'`
 
-LAST_GREEN_SHA1=$(curl -sSL http://sonarsource-979.appspot.com/$PROJECT/latestGreen)
+echo "is ${HEAD_SHA1}"
 
-build "$PROJECT" "$LAST_GREEN_SHA1"
+build "$PROJECT" "$HEAD_SHA1"
