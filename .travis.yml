@@ -6,8 +6,7 @@ script: ./travis.sh
 
 env:
   - TESTS=SONARQUBE_SNAPSHOT
-  - TESTS=SONAR_VIEWS
-  - TESTS=SONAR_VIEWS_SNAPSHOT
+  - TESTS=SONAR_DB_COPY_SNAPSHOT
 
 notifications:
   email: false

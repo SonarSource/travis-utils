@@ -16,28 +16,10 @@ SONARQUBE_SNAPSHOT)
   build_snapshot "SonarSource/sonarqube"
   ;;
 
-SONAR_CPP_SNAPSHOT)
-  build "SonarSource/parent" "31"
-  build "SonarSource/sonar-license" "2.9"
-
-  build "SonarSource/parent" "31"
-  build_snapshot "SonarSource/sonar-cpp"
-  ;;
-
-SONAR_VIEWS_SNAPSHOT)
-  build "SonarSource/parent" "28"
-  build "SonarSource/sonar-license" "2.9"
-
+SONAR_DB_COPY_SNAPSHOT)
   build "SonarSource/parent" "30"
-  build_snapshot "SonarSource/sonar-views"
+  build_snapshot "SonarSource/sonar-db-copy"
   ;;
 
-SONAR_VIEWS)
-  build "SonarSource/parent" "28"
-  build "SonarSource/sonar-license" "2.9"
-
-  build "SonarSource/parent" "30"
-  build "SonarSource/sonar-views" "2.8"
-  ;;
 
 esac
