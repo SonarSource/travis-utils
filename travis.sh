@@ -25,18 +25,18 @@ SONAR_CPP_SNAPSHOT)
   ;;
 
 SONAR_VIEWS_SNAPSHOT)
-  build "SonarSource/parent" "31"
+  build "SonarSource/parent" "28"
   build "SonarSource/sonar-license" "2.9"
 
-  build "SonarSource/parent" "31"
+  build "SonarSource/parent" "30"
   build_snapshot "SonarSource/sonar-views"
   ;;
 
 SONAR_VIEWS)
-  build "SonarSource/parent" "31"
+  build "SonarSource/parent" "28"
   build "SonarSource/sonar-license" "2.9"
 
-  build "SonarSource/parent" "31"
+  build "SonarSource/parent" "30"
   build "SonarSource/sonar-views" "2.8"
   ;;
 
