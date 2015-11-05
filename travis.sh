@@ -29,7 +29,7 @@ SONAR_VIEWS_SNAPSHOT)
   ;;
 
 SONAR_VIEWS)
-  build "SonarSource/sonar-views" "31"
+  build "SonarSource/sonar-views" "2.8"
   ;;
 
 esac
