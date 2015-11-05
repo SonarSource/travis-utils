@@ -24,8 +24,8 @@ SONAR_CPP_SNAPSHOT)
   build_snapshot "SonarSource/sonar-cpp"
   ;;
 
-SONAR_VIEWS_SNAPSHOT)
-  build_snapshot "SonarSource/sonar-views"
+SONAR_VIEWS)
+  build "SonarSource/sonar-views"
   ;;
 
 esac
