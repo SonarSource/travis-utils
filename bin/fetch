@@ -1,15 +1,19 @@
 #!/bin/bash
 # Usage: fetch "directory" "user/project" "branch"
 # If project is private, then  the env variable GITHUB_TOKEN must be defined from the outside.
-# Non-Travis environments are supported.
+# This script works on non-Travis environments too.
 set -euo pipefail
 
-mkdir -p $1
+DIRECTORY=$1
+PROJECT=$2
+SHA1=$3
+
+mkdir -p $DIRECTORY
 
 if [ "${GITHUB_TOKEN:-}" == "" ]; then
   echo "Fetch public [$PROJECT:$SHA1]"
-  curl -sSL https://github.com/$2/tarball/$3 | tar zx --strip-components 1 -C $1
+  curl -sSL https://github.com/$PROJECT/tarball/$SHA1 | tar zx --strip-components 1 -C $DIRECTORY
 else
   echo "Fetch [$PROJECT:$SHA1]"
-  curl -sSL https://$GITHUB_TOKEN@github.com/$2/tarball/$3 | tar zx --strip-components 1 -C $1
+  curl -sSL https://$GITHUB_TOKEN@github.com/$PROJECT/tarball/$SHA1 | tar zx --strip-components 1 -C $DIRECTORY
 fi
