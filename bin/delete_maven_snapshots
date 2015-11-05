@@ -3,7 +3,7 @@
 
 set -euo pipefail
 
-MAVEN_LOCAL_REPOSITORY=`mvn help:evaluate -Dexpression=settings.localRepository | grep -v '^[[]'`
+MAVEN_LOCAL_REPOSITORY=`./maven_local_repository`
 
 find $MAVEN_LOCAL_REPOSITORY -type d -name \*-SNAPSHOT -exec rm -rf {} \;
 find $MAVEN_LOCAL_REPOSITORY -name maven-metadata-\* -exec rm {} \;

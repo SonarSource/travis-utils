@@ -1,0 +1,7 @@
+#!/bin/bash
+# Usage: maven_local_repository
+# Resolves the location of the Maven local repository. Can be different than ~/.m2/repository
+
+set -euo pipefail
+
+echo `mvn help:evaluate -Dexpression=settings.localRepository | grep -v '^[[]'`
