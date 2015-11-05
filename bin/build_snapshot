@@ -5,9 +5,12 @@ set -euo pipefail
 
 PROJECT=$1
 
-echo "Compute HEAD SHA1 of [$PROJECT]"
+echo "Get HEAD SHA1 of [$PROJECT]"
+if [ -z "${GITHUB_TOKEN:=}" ]; then
 HEAD_SHA1=`git ls-remote https://github.com/${PROJECT} HEAD | grep -o '^[a-f0-9]\{40\}'`
-
+else
+HEAD_SHA1=`git ls-remote https://${GITHUB_TOKEN}@github.com/${PROJECT} HEAD | grep -o '^[a-f0-9]\{40\}'`
+fi
 echo "is ${HEAD_SHA1}"
 
-build "$PROJECT" "$HEAD_SHA1"
+build "$PROJECT" "${HEAD_SHA1}"
