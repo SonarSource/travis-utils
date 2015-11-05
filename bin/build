@@ -1,24 +1,45 @@
 #!/bin/bash
 # Usage build "user/project" "sha1"
+# If project is private, then  the env variable GITHUB_TOKEN must be defined from the outside.
+# Argument sha1 can be "HEAD".
+# Non-Travis environments are supported.
+# Example: build "SonarSource/sonarqube" "266e313"
 
 set -euo pipefail
 
 PROJECT=$1
 SHA1=$2
 DIRECTORY="/tmp/$PROJECT/$SHA1"
+MAVEN_LOCAL_REPOSITORY=`./maven_local_repository`
 
-if [ -f "$HOME/.m2/repository/$PROJECT/$SHA1" ]; then
-  echo "Project [$PROJECT] with sha1 [$SHA1] is already on cache"
+if [ "${SHA1}" == "HEAD" ]; then
+  echo "Get SHA1 of [$PROJECT:HEAD]"
+  if [ -z "${GITHUB_TOKEN:=}" ]; then
+    SHA1=`git ls-remote https://github.com/${PROJECT} HEAD | grep -o '^[a-f0-9]\{40\}'`
+  else
+    SHA1=`git ls-remote https://${GITHUB_TOKEN}@github.com/${PROJECT} HEAD | grep -o '^[a-f0-9]\{40\}'`
+  fi
+  echo "${SHA1}"
+fi
+
+if [ -f "$MAVEN_LOCAL_REPOSITORY/$PROJECT/$SHA1" ]; then
+  echo "Project [$PROJECT:$SHA1] is already on cache"
 else
-  echo "Fetch [$PROJECT:$SHA1]"
-  fetch $DIRECTORY $PROJECT $SHA1
+  ./fetch $DIRECTORY $PROJECT $SHA1
 
   echo "Build [$PROJECT:$SHA1]"
   cd $DIRECTORY
   mvn install -DskipTests -Pdev
   cd -
 
-  rm -Rf $HOME/.m2/repository/$PROJECT
-  mkdir -p $HOME/.m2/repository/$PROJECT
-  echo "OK" > $HOME/.m2/repository/$PROJECT/${SHA1////-}
+  # delete build directory (temp)
+  echo "Delete $DIRECTORY"
+  rm -Rf $DIRECTORY
+
+  # delete all references to other SHA1 of project
+  rm -Rf $MAVEN_LOCAL_REPOSITORY/$PROJECT
+
+  # mark the SHA1 as available in cache
+  mkdir -p $MAVEN_LOCAL_REPOSITORY/$PROJECT
+  echo "OK" > $MAVEN_LOCAL_REPOSITORY/$PROJECT/${SHA1////-}
 fi
