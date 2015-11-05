@@ -13,20 +13,22 @@ function installTravisTools {
 
 installTravisTools
 
-case "$TESTS" in
+case "$TEST" in
 
-SONARQUBE_SNAPSHOT)
-  build_snapshot "SonarSource/sonarqube"
+BUILD_PUBLIC_SNAPSHOT)
+  build_snapshot "SonarSource/parent-oss"
   ;;
 
-SONAR_DB_COPY_SNAPSHOT)
-  build "SonarSource/parent" "30"
-  build_snapshot "SonarSource/sonar-db-copy"
+BUILD_PRIVATE_SNAPSHOT)
+  build_snapshot "SonarSource/parent"
   ;;
 
-SONAR_DB_COPY)
-  build "SonarSource/parent" "30"
-  build "SonarSource/sonar-db-copy" "1.0.1"
+BUILD_SHA1)
+  build "SonarSource/parent-oss" "24"
   ;;
 
+*)
+  echo "Unexpected TEST value: $TEST"
+  exit 1
+  ;;
 esac
