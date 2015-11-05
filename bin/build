@@ -29,7 +29,11 @@ else
 
   echo "Build [$PROJECT:$SHA1]"
   cd $DIRECTORY
-  mvn install -DskipTests -Pdev
+  if [ -f "$DIRECTORY/quick-build.sh" ]; then
+    ./quick-build.sh
+  else
+    mvn install -DskipTests -Pdev
+  fi
   cd -
 
   # delete build directory (temp)
