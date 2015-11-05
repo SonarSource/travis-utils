@@ -3,6 +3,8 @@
 
 set -euo pipefail
 
-find ~/.m2/repository -type d -name \*-SNAPSHOT -exec rm -rf {} \;
-find ~/.m2/repository -name maven-metadata-\* -exec rm {} \;
-find ~/.m2/repository -name resolver-status.properties -exec rm {} \;
+MAVEN_LOCAL_REPOSITORY=`mvn help:evaluate -Dexpression=settings.localRepository | grep -v '^[[]'`
+
+find $MAVEN_LOCAL_REPOSITORY -type d -name \*-SNAPSHOT -exec rm -rf {} \;
+find $MAVEN_LOCAL_REPOSITORY -name maven-metadata-\* -exec rm {} \;
+find $MAVEN_LOCAL_REPOSITORY -name resolver-status.properties -exec rm {} \;
