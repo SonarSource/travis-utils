@@ -32,7 +32,7 @@ else
   if [ -f "$DIRECTORY/quick-build.sh" ]; then
     ./quick-build.sh
   else
-    mvn install -DskipTests -Pdev
+    mvn install -Dsource.skip=true -Denforcer.skip=true -Danimal.sniffer.skip=true -Dmaven.test.skip=true -Pdev
   fi
   cd -
 
