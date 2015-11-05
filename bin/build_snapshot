@@ -7,5 +7,5 @@ set -euo pipefail
 
 PROJECT=$1
 
-build "$PROJECT" "HEAD"
+$(dirname -- "$0")/build "$PROJECT" "HEAD"
 
