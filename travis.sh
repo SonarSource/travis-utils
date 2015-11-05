@@ -21,5 +21,9 @@ SONAR_DB_COPY_SNAPSHOT)
   build_snapshot "SonarSource/sonar-db-copy"
   ;;
 
+SONAR_DB_COPY)
+  build "SonarSource/parent" "30"
+  build "SonarSource/sonar-db-copy"
+  ;;
 
 esac
