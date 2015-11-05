@@ -10,7 +10,8 @@ set -euo pipefail
 PROJECT=$1
 SHA1=$2
 DIRECTORY="/tmp/$PROJECT/$SHA1"
-MAVEN_LOCAL_REPOSITORY=`./maven_local_repository`
+# FIXME how to use the output of script maven_local_repository ?
+MAVEN_LOCAL_REPOSITORY=$HOME/.m2/repository
 
 if [ "${SHA1}" == "HEAD" ]; then
   echo "Get SHA1 of [$PROJECT:HEAD]"
@@ -25,25 +26,21 @@ fi
 if [ -f "$MAVEN_LOCAL_REPOSITORY/$PROJECT/$SHA1" ]; then
   echo "Project [$PROJECT:$SHA1] is already on cache"
 else
-  ./fetch $DIRECTORY $PROJECT $SHA1
+  fetch $DIRECTORY $PROJECT $SHA1
 
   echo "Build [$PROJECT:$SHA1]"
   cd $DIRECTORY
-  if [ -f "$DIRECTORY/quick-build.sh" ]; then
+  if [ -f "quick-build.sh" ]; then
     ./quick-build.sh
   else
     mvn install -Dsource.skip=true -Denforcer.skip=true -Danimal.sniffer.skip=true -Dmaven.test.skip=true -Pdev
   fi
   cd -
 
-  # delete build directory (temp)
-  echo "Delete $DIRECTORY"
-  rm -Rf $DIRECTORY
-
   # delete all references to other SHA1 of project
   rm -Rf $MAVEN_LOCAL_REPOSITORY/$PROJECT
+  mkdir -p $MAVEN_LOCAL_REPOSITORY/$PROJECT
 
   # mark the SHA1 as available in cache
-  mkdir -p $MAVEN_LOCAL_REPOSITORY/$PROJECT
   echo "OK" > $MAVEN_LOCAL_REPOSITORY/$PROJECT/${SHA1////-}
 fi

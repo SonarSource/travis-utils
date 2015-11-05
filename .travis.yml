@@ -4,10 +4,5 @@ install: true
 jdk: oraclejdk7
 script: ./travis.sh
 
-env:
-  - TEST=BUILD_PUBLIC_SNAPSHOT
-  - TEST=BUILD_PRIVATE_SNAPSHOT
-  - TEST=BUILD_SHA1
-
 notifications:
   email: false
