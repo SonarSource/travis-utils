@@ -7,8 +7,12 @@ set -euo pipefail
 # M2_HOME is the env variable supported by Maven 2 and 3
 # If not set, then extract the setting from Maven execution
 if [ -z "${M2_HOME:=}" ]; then
+    # change dir to protect against local POM
+  pushd $(dirname -- "$0") > /dev/null
   # filter out maven output for noise like [INFO], Downloading and Downloaded
   mvn help:evaluate -Dexpression=settings.localRepository | grep -v '^\[\|Download\w\+\:'
+    # go back
+  popd > /dev/null
 else
   echo "${M2_HOME}/repository"
 fi
