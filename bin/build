@@ -2,8 +2,9 @@
 # Usage build "user/project" "sha1"
 # If project is private, then  the env variable GITHUB_TOKEN must be defined from the outside.
 # Argument sha1 can be "HEAD".
-# Non-Travis environments are supported.
 # Example: build "SonarSource/sonarqube" "266e313"
+#
+# Non-Travis environments are supported, including MacOS.
 
 set -euo pipefail
 
