@@ -9,13 +9,15 @@ set -euo pipefail
 
 PROJECT=$1
 SHA1=$2
-DIRECTORY="/tmp/$PROJECT/$SHA1"
-MAVEN_LOCAL_REPOSITORY=`maven_local_repository`
+MAVEN_LOCAL_REPOSITORY=`$(dirname -- "$0")/maven_local_repository`
+DIRECTORY=`$(dirname -- "$0")/create_temp_dir`
 
+# delete temp directory on exit
 cleanupTemp()
 {
-  echo "Clean-up $DIRECTORY"
-	rm -Rf $DIRECTORY
+  if [ -d "$DIRECTORY" ]; then
+    rm -Rf $DIRECTORY
+	fi
 }
 trap 'cleanupTemp' EXIT
 
