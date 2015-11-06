@@ -3,8 +3,7 @@
 
 set -euo pipefail
 
-# FIXME how to use the output of script maven_local_repository ?
-MAVEN_LOCAL_REPOSITORY=$HOME/.m2/repository
+MAVEN_LOCAL_REPOSITORY=`maven_local_repository`
 
 find $MAVEN_LOCAL_REPOSITORY -type d -name \*-SNAPSHOT -exec rm -rf {} \;
 find $MAVEN_LOCAL_REPOSITORY -name maven-metadata-\* -exec rm {} \;

@@ -4,4 +4,4 @@
 
 set -euo pipefail
 
-mvn help:evaluate -Dexpression=settings.localRepository | grep -v '^[[]'
+mvn help:evaluate -Dexpression=settings.localRepository | grep -v '^[[]' | tail -1

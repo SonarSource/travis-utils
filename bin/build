@@ -10,8 +10,7 @@ set -euo pipefail
 PROJECT=$1
 SHA1=$2
 DIRECTORY="/tmp/$PROJECT/$SHA1"
-# FIXME how to use the output of script maven_local_repository ?
-MAVEN_LOCAL_REPOSITORY=$HOME/.m2/repository
+MAVEN_LOCAL_REPOSITORY=`maven_local_repository`
 
 if [ "${SHA1}" == "HEAD" ]; then
   echo "Get SHA1 of [$PROJECT:HEAD]"
