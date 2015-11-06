@@ -4,4 +4,5 @@
 
 set -euo pipefail
 
-mvn help:evaluate -Dexpression=settings.localRepository | grep -v '^[[]' | tail -1
+# filter out maven output for noise like [INFO], Downloading and Downloaded
+mvn help:evaluate -Dexpression=settings.localRepository | grep -v '^\[\|Download\w\+\:'
