@@ -1,7 +1,8 @@
 #!/bin/bash
 # Usage: build_snapshot "user/project"
 # Example: build_snapshot "SonarSource/sonarqube"
-# Non-Travis environments are supported.
+#
+# Non-Travis environments are supported, including MacOS.
 
 set -euo pipefail
 

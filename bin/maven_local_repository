@@ -4,5 +4,11 @@
 
 set -euo pipefail
 
-# filter out maven output for noise like [INFO], Downloading and Downloaded
-mvn help:evaluate -Dexpression=settings.localRepository | grep -v '^\[\|Download\w\+\:'
+# M2_HOME is the env variable supported by Maven 2 and 3
+# If not set, then extract the setting from Maven execution
+if [ -z "${M2_HOME:=}" ]; then
+  # filter out maven output for noise like [INFO], Downloading and Downloaded
+  mvn help:evaluate -Dexpression=settings.localRepository | grep -v '^\[\|Download\w\+\:'
+else
+  echo "${M2_HOME}/repository"
+fi
