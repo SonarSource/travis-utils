@@ -12,6 +12,13 @@ SHA1=$2
 DIRECTORY="/tmp/$PROJECT/$SHA1"
 MAVEN_LOCAL_REPOSITORY=`maven_local_repository`
 
+cleanupTemp()
+{
+  echo "Clean-up $DIRECTORY"
+	rm -Rf $DIRECTORY
+}
+trap 'cleanupTemp' EXIT
+
 if [ "${SHA1}" == "HEAD" ]; then
   echo "Get SHA1 of [$PROJECT:HEAD]"
   if [ -z "${GITHUB_TOKEN:=}" ]; then
