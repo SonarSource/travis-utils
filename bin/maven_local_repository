@@ -4,4 +4,10 @@
 
 set -euo pipefail
 
-mvn help:evaluate -Dexpression=settings.localRepository | grep -v '^[[]' | tail -1
+# M2_HOME is the env variable supported by Maven 2 and 3
+# If not set, then extract the setting from Maven execution
+if [ -z "${M2_HOME:=}" ]; then
+  mvn help:evaluate -Dexpression=settings.localRepository | grep -v '^[[]' | tail -1
+else
+  echo "${M2_HOME}/repository"
+fi
