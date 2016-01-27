@@ -9,4 +9,7 @@ export DISPLAY=:99.0
 
 echo "Install jars into local maven repository"
 mkdir -p ~/.m2/repository
-cp -r $TRAVIS_UTILS_HOME/m2repo/* ~/.m2/repository
+cp -r $TRAVIS_UTILS_HOME/m2/repository/* ~/.m2/repository
+
+echo "Copy maven settings"
+cp $TRAVIS_UTILS_HOME/m2/settings.xml ~/.m2/
