@@ -15,7 +15,7 @@ function assertFileContains {
   FILE=$1
   EXPECTED=$2
   if ! grep -q "$EXPECTED" $FILE; then
-    echo "File $FILE does not contain $EXPECTED"
+    echo "File $FILE does not contain '$EXPECTED'"
     echo "Got:"
     cat $FILE
     exit 1
@@ -31,6 +31,7 @@ assertFileContains $LOG_FILE "Get SHA1 of \[SonarSource/parent-oss:HEAD\]"
 assertFileContains $LOG_FILE "Build \[SonarSource/parent-oss:"
 assertFileContains $LOG_FILE "BUILD SUCCESS"
 # reuse cache
+echo "------- build_snapshot of public project (new run, to test cache)"
 build_snapshot "SonarSource/parent-oss" > $LOG_FILE
 assertFileContains $LOG_FILE "Get SHA1 of \[SonarSource/parent-oss:HEAD\]"
 assertFileContains $LOG_FILE "is already on cache"
@@ -44,6 +45,7 @@ assertFileContains $LOG_FILE "Get SHA1 of \[SonarSource/parent:HEAD\]"
 assertFileContains $LOG_FILE "Build \[SonarSource/parent:"
 assertFileContains $LOG_FILE "BUILD SUCCESS"
 # reuse cache
+echo "------- build_snapshot of private project (new run, to test cache)"
 build_snapshot "SonarSource/parent" > $LOG_FILE
 assertFileContains $LOG_FILE "Get SHA1 of \[SonarSource/parent:HEAD\]"
 assertFileContains $LOG_FILE "is already on cache"
@@ -56,5 +58,6 @@ build "SonarSource/parent-oss" "24" > $LOG_FILE
 assertFileContains $LOG_FILE "Build \[SonarSource/parent-oss:24\]"
 assertFileContains $LOG_FILE "BUILD SUCCESS"
 # reuse cache
+echo "------- build sha1 (new run, to test cache)"
 build "SonarSource/parent-oss" "24" > $LOG_FILE
 assertFileContains $LOG_FILE "is already on cache"

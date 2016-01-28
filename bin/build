@@ -10,7 +10,7 @@ set -euo pipefail
 
 PROJECT=$1
 SHA1=$2
-MAVEN_LOCAL_REPOSITORY=`$(dirname -- "$0")/maven_local_repository`
+MAVEN_LOCAL_REPOSITORY=$HOME/.m2/repository
 DIRECTORY=`$(dirname -- "$0")/create_temp_dir`
 
 # delete temp directory on exit
@@ -22,19 +22,20 @@ cleanupTemp()
 }
 trap 'cleanupTemp' EXIT
 
-if [ "${SHA1}" == "HEAD" ]; then
+if [ "z$SHA1" = "zHEAD" ]; then
   echo "Get SHA1 of [$PROJECT:HEAD]"
   if [ -z "${GITHUB_TOKEN:=}" ]; then
     SHA1=`git ls-remote https://github.com/${PROJECT} HEAD | grep -o '^[a-f0-9]\{40\}'`
   else
     SHA1=`git ls-remote https://${GITHUB_TOKEN}@github.com/${PROJECT} HEAD | grep -o '^[a-f0-9]\{40\}'`
   fi
-  echo "${SHA1}"
+  echo "$SHA1"
 fi
 
-if [ -f "$MAVEN_LOCAL_REPOSITORY/$PROJECT/$SHA1" ]; then
+if [ -f "$MAVEN_LOCAL_REPOSITORY/travis-utils/$PROJECT/$SHA1" ]; then
   echo "Project [$PROJECT:$SHA1] is already on cache"
 else
+  echo "Not in cache. $MAVEN_LOCAL_REPOSITORY/travis-utils/$PROJECT/$SHA1 does not exist"
   $(dirname -- "$0")/fetch $DIRECTORY $PROJECT $SHA1
 
   echo "Build [$PROJECT:$SHA1]"
@@ -47,9 +48,10 @@ else
   cd -
 
   # delete all references to other SHA1 of project
-  rm -Rf $MAVEN_LOCAL_REPOSITORY/$PROJECT
-  mkdir -p $MAVEN_LOCAL_REPOSITORY/$PROJECT
+  rm -Rf $MAVEN_LOCAL_REPOSITORY/travis-utils/$PROJECT
+  mkdir -p $MAVEN_LOCAL_REPOSITORY/travis-utils/$PROJECT
 
   # mark the SHA1 as available in cache
-  echo "OK" > $MAVEN_LOCAL_REPOSITORY/$PROJECT/${SHA1////-}
+  touch $MAVEN_LOCAL_REPOSITORY/travis-utils/$PROJECT/$SHA1
+  echo "OK" > $MAVEN_LOCAL_REPOSITORY/travis-utils/$PROJECT/$SHA1
 fi

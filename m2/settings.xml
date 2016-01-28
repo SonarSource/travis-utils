@@ -1,9 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<settings xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.1.0 http://maven.apache.org/xsd/settings-1.1.0.xsd"
-          xmlns="http://maven.apache.org/SETTINGS/1.1.0"
-          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
+http://maven.apache.org/xsd/settings-1.0.0.xsd">
   <profiles>
+    <profile>
+      <id>central-repo</id>
+      <activation>
+        <property>
+          <name>skip-sonarsource-public-repo</name>
+        </property>
+      </activation>
+      <repositories>
+        <repository>
+          <id>central</id>
+          <name>Central Repository</name>
+          <url>https://repo1.maven.org/maven2/</url>
+          <releases>
+            <enabled>true</enabled>
+          </releases>
+          <snapshots>
+            <enabled>false</enabled>
+          </snapshots>
+        </repository>
+      </repositories>
+      <pluginRepositories>
+        <pluginRepository>
+          <id>central</id>
+          <name>Central Repository</name>
+          <url>https://repo1.maven.org/maven2/</url>
+          <releases>
+            <enabled>true</enabled>
+          </releases>
+          <snapshots>
+            <enabled>false</enabled>
+          </snapshots>
+        </pluginRepository>
+      </pluginRepositories>
+    </profile>
+
     <profile>
       <id>sonarsource-public-repo</id>
       <activation>
@@ -13,26 +47,13 @@
       </activation>
       <repositories>
         <repository>
-          <id>sonarsource-public-releases</id>
-          <name>sonarsource-public-releases</name>
-          <url>https://repox.sonarsource.com/sonarsource-public-releases</url>
+          <id>central</id>
+          <name>sonarsource</name>
+          <url>https://repox.sonarsource.com/sonarsource</url>
           <releases>
             <enabled>true</enabled>
             <updatePolicy>always</updatePolicy>
             <checksumPolicy>fail</checksumPolicy>
-          </releases>
-          <snapshots>
-            <enabled>false</enabled>
-            <updatePolicy>never</updatePolicy>
-          </snapshots>
-        </repository>
-        <repository>
-          <id>sonarsource-public-snapshots</id>
-          <name>sonarsource-public-snapshots</name>
-          <url>https://repox.sonarsource.com/sonarsource-public-snapshots</url>
-          <releases>
-            <enabled>false</enabled>
-            <updatePolicy>never</updatePolicy>
           </releases>
           <snapshots>
             <enabled>true</enabled>
@@ -43,26 +64,13 @@
       </repositories>
       <pluginRepositories>
         <pluginRepository>
-          <id>sonarsource-public-releases</id>
+          <id>central</id>
           <name>sonarsource-public-releases</name>
-          <url>https://repox.sonarsource.com/sonarsource-public-releases</url>
+          <url>https://repox.sonarsource.com/sonarsource</url>
           <releases>
             <enabled>true</enabled>
             <updatePolicy>always</updatePolicy>
             <checksumPolicy>fail</checksumPolicy>
-          </releases>
-          <snapshots>
-            <enabled>false</enabled>
-            <updatePolicy>never</updatePolicy>
-          </snapshots>
-        </pluginRepository>
-        <pluginRepository>
-          <id>sonarsource-public-snapshots</id>
-          <name>sonarsource-public-snapshots</name>
-          <url>https://repox.sonarsource.com/sonarsource-public-snapshots</url>
-          <releases>
-            <enabled>false</enabled>
-            <updatePolicy>never</updatePolicy>
           </releases>
           <snapshots>
             <enabled>true</enabled>

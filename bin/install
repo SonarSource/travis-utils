@@ -8,8 +8,8 @@ export TRAVIS_UTILS_HOME=$HOME/.local
 export DISPLAY=:99.0
 
 echo "Install jars into local maven repository"
-mkdir -p ~/.m2/repository
-cp -r $TRAVIS_UTILS_HOME/m2/repository/* ~/.m2/repository
+mkdir -p $HOME/.m2/repository
+cp -r $TRAVIS_UTILS_HOME/m2/repository/* $HOME/.m2/repository
 
 echo "Copy maven settings"
-cp $TRAVIS_UTILS_HOME/m2/settings.xml ~/.m2/
+cp $TRAVIS_UTILS_HOME/m2/settings.xml $HOME/.m2/
