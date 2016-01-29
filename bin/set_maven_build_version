@@ -9,4 +9,4 @@ NEW_VERSION="$RELEASE_VERSION-build$BUILD_ID"
 
 echo "Replacing version $CURRENT_VERSION with $NEW_VERSION"
 
-mvn org.codehaus.mojo:versions-maven-plugin::set -DnewVersion=$NEW_VERSION
+mvn org.codehaus.mojo:versions-maven-plugin:2.2:set -DnewVersion=$NEW_VERSION
