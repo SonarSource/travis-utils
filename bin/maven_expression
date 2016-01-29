@@ -1,4 +1,7 @@
 #!/bin/bash
+# Evaluate a Maven expression
+# Usage: maven_expression "expression"
+# Example: maven_expression "project.version"
 
 set -euo pipefail
 
