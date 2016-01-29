@@ -24,6 +24,23 @@ function assertFileContains {
 
 installTravisTools
 
+echo "------ test maven_expression and set_maven_build_version"
+cd tests
+EXPRESSION=`maven_expression "project.version"`
+if [! "$EXPRESSION" = "0.1-SNAPSHOT"]; then
+  echo "Got $EXPRESSION instead of 0.1-SNAPSHOT"
+  exit 1
+fi
+set_maven_build_version "1234"
+EXPRESSION=`maven_expression "project.version"`
+if [! "$EXPRESSION" = "0.1-build1234"]; then
+  echo "Got $EXPRESSION instead of 0.1-build1234"
+  exit 1
+fi
+cd -
+
+
+
 echo "------- build_snapshot of public project"
 LOG_FILE=/tmp/build_public_snapshot.log
 build_snapshot "SonarSource/parent-oss" > $LOG_FILE
