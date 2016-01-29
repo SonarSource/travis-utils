@@ -24,7 +24,7 @@ http://maven.apache.org/xsd/settings-1.0.0.xsd">
           <url>https://repox.sonarsource.com/sonarsource</url>
           <releases>
             <enabled>true</enabled>
-            <updatePolicy>always</updatePolicy>
+            <updatePolicy>daily</updatePolicy>
             <checksumPolicy>fail</checksumPolicy>
           </releases>
           <snapshots>
@@ -40,7 +40,9 @@ http://maven.apache.org/xsd/settings-1.0.0.xsd">
           <url>https://repox.sonarsource.com/sonarsource</url>
           <releases>
             <enabled>true</enabled>
-            <updatePolicy>always</updatePolicy>
+            <!-- no need to always check if new versions are available when
+            executing a maven plugin without specifying the version -->
+            <updatePolicy>daily</updatePolicy>
             <checksumPolicy>fail</checksumPolicy>
           </releases>
           <snapshots>
