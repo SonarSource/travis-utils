@@ -1,10 +1,9 @@
 #!/bin/bash
 # Usage: delete_maven_snapshots
-# Non-Travis environments are supported, including MacOS.
 
 set -euo pipefail
 
-MAVEN_LOCAL_REPOSITORY=`$(dirname -- "$0")/maven_local_repository`
+MAVEN_LOCAL_REPOSITORY=$HOME/.m2/repository
 
 find $MAVEN_LOCAL_REPOSITORY -type d -name \*-SNAPSHOT -exec rm -rf {} \;
 find $MAVEN_LOCAL_REPOSITORY -name maven-metadata-\* -exec rm {} \;
