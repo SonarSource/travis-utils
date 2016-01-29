@@ -2,53 +2,25 @@
 <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+  <servers>
+    <server>
+      <id>sonarsource</id>
+      <username>${env.SONARSOURCE_REPO_USERNAME}</username>
+      <password>${env.SONARSOURCE_REPO_PASSWORD}</password>
+    </server>
+  </servers>
   <profiles>
     <profile>
-      <id>central-repo</id>
+      <id>sonarsource-repo</id>
       <activation>
         <property>
-          <name>skip-sonarsource-public-repo</name>
+          <name>!skip-sonarsource-repo</name>
         </property>
       </activation>
       <repositories>
         <repository>
-          <id>central</id>
-          <name>Central Repository</name>
-          <url>https://repo1.maven.org/maven2/</url>
-          <releases>
-            <enabled>true</enabled>
-          </releases>
-          <snapshots>
-            <enabled>false</enabled>
-          </snapshots>
-        </repository>
-      </repositories>
-      <pluginRepositories>
-        <pluginRepository>
-          <id>central</id>
-          <name>Central Repository</name>
-          <url>https://repo1.maven.org/maven2/</url>
-          <releases>
-            <enabled>true</enabled>
-          </releases>
-          <snapshots>
-            <enabled>false</enabled>
-          </snapshots>
-        </pluginRepository>
-      </pluginRepositories>
-    </profile>
-
-    <profile>
-      <id>sonarsource-public-repo</id>
-      <activation>
-        <property>
-          <name>!skip-sonarsource-public-repo</name>
-        </property>
-      </activation>
-      <repositories>
-        <repository>
-          <id>central</id>
-          <name>sonarsource</name>
+          <id>sonarsource</id>
+          <name>SonarSource Central Repository</name>
           <url>https://repox.sonarsource.com/sonarsource</url>
           <releases>
             <enabled>true</enabled>
@@ -56,16 +28,15 @@ http://maven.apache.org/xsd/settings-1.0.0.xsd">
             <checksumPolicy>fail</checksumPolicy>
           </releases>
           <snapshots>
-            <enabled>true</enabled>
-            <updatePolicy>always</updatePolicy>
-            <checksumPolicy>fail</checksumPolicy>
+            <enabled>false</enabled>
+            <updatePolicy>never</updatePolicy>
           </snapshots>
         </repository>
       </repositories>
       <pluginRepositories>
         <pluginRepository>
-          <id>central</id>
-          <name>sonarsource-public-releases</name>
+          <id>sonarsource</id>
+          <name>SonarSource Central Repository</name>
           <url>https://repox.sonarsource.com/sonarsource</url>
           <releases>
             <enabled>true</enabled>
@@ -73,9 +44,8 @@ http://maven.apache.org/xsd/settings-1.0.0.xsd">
             <checksumPolicy>fail</checksumPolicy>
           </releases>
           <snapshots>
-            <enabled>true</enabled>
-            <updatePolicy>always</updatePolicy>
-            <checksumPolicy>fail</checksumPolicy>
+            <enabled>false</enabled>
+            <updatePolicy>never</updatePolicy>
           </snapshots>
         </pluginRepository>
       </pluginRepositories>
