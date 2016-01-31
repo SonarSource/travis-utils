@@ -4,7 +4,7 @@
 set -euo pipefail
 
 # Build current version of SonarQube (Don't create a zip)
-mvn install -DskipTests -Pdev -Dassembly.format=dir -Dchecksum.failOnError=false -T2 -Dsource.skip=true
+mvn install -DskipTests -Pdev -Dassembly.format=dir -Dchecksum.failOnError=false -T2 -Dsource.skip=true -e -B -V
 
 # Start server
 cd sonar-application/target/sonarqube-*/sonarqube-*
@@ -28,7 +28,7 @@ for i in {1..30}; do
 
     # Run the tests
     cd ../../../..
-    mvn package -pl :sonar-db -am -PdbTests -Dsonar.jdbc.dialect=$1 -Dsonar.jdbc.url=$2 -Dsonar.jdbc.username=$3 -Dsonar.jdbc.password=${4:-} -V
+    mvn package -pl :sonar-db -am -PdbTests -Dsonar.jdbc.dialect=$1 -Dsonar.jdbc.url=$2 -Dsonar.jdbc.username=$3 -Dsonar.jdbc.password=${4:-} -V -e -B
     exit $?
   fi
 

@@ -43,7 +43,7 @@ else
   if [ -f "quick-build.sh" ]; then
     ./quick-build.sh
   else
-    mvn install -Dsource.skip=true -Denforcer.skip=true -Danimal.sniffer.skip=true -Dmaven.test.skip=true -Pdev
+    mvn install -Dsource.skip=true -Denforcer.skip=true -Danimal.sniffer.skip=true -Dmaven.test.skip=true -Pdev -e -B -V
   fi
   cd -
 
