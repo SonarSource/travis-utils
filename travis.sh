@@ -40,7 +40,6 @@ fi
 cd -
 
 
-
 echo "------- build_snapshot of public project"
 LOG_FILE=/tmp/build_public_snapshot.log
 build_snapshot "SonarSource/parent-oss" > $LOG_FILE
@@ -52,21 +51,6 @@ echo "------- build_snapshot of public project (new run, to test cache)"
 build_snapshot "SonarSource/parent-oss" > $LOG_FILE
 assertFileContains $LOG_FILE "Get SHA1 of \[SonarSource/parent-oss:HEAD\]"
 assertFileContains $LOG_FILE "is already on cache"
-
-
-
-echo "------- build_snapshot of private project"
-LOG_FILE=/tmp/build_private_snapshot.log
-build_snapshot "SonarSource/parent" > $LOG_FILE
-assertFileContains $LOG_FILE "Get SHA1 of \[SonarSource/parent:HEAD\]"
-assertFileContains $LOG_FILE "Build \[SonarSource/parent:"
-assertFileContains $LOG_FILE "BUILD SUCCESS"
-# reuse cache
-echo "------- build_snapshot of private project (new run, to test cache)"
-build_snapshot "SonarSource/parent" > $LOG_FILE
-assertFileContains $LOG_FILE "Get SHA1 of \[SonarSource/parent:HEAD\]"
-assertFileContains $LOG_FILE "is already on cache"
-
 
 
 echo "------- build sha1"
