@@ -38,13 +38,21 @@ if [ "${TRAVIS_BRANCH}" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; 
       -B -e -V
 
 elif [ "$TRAVIS_PULL_REQUEST" != "false" ] && [ -n "${GITHUB_TOKEN:-}" ]; then
-  echo '======= Build and analyze pull request, no deploy'
+  echo '======= Build and analyze pull request, deploy'
+
+  # Analyze with SNAPSHOT version as long as SQ does not correctly handle
+  # purge of release data
+  SONAR_PROJECT_VERSION=`maven_expression "project.version"`
+
+  # Do not deploy a SNAPSHOT version but the release version related to this build and PR
+  set_maven_build_version $TRAVIS_BUILD_NUMBER
 
   # No need for Maven phase "install" as the generated JAR files do not need to be installed
   # in Maven local repository. Phase "verify" is enough.
 
   export MAVEN_OPTS="-Xmx1G -Xms128m"
-  mvn org.jacoco:jacoco-maven-plugin:prepare-agent verify sonar:sonar \
+  mvn org.jacoco:jacoco-maven-plugin:prepare-agent deploy sonar:sonar \
+      -Pdeploy-sonarsource \
       -Dmaven.test.redirectTestOutputToFile=false \
       -Dsonar.analysis.mode=issues \
       -Dsonar.github.pullRequest=$TRAVIS_PULL_REQUEST \
