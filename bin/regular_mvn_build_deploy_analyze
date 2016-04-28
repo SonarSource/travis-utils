@@ -11,7 +11,7 @@
 
 set -euo pipefail
 
-if [ "${TRAVIS_BRANCH}" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
+if [ "${TRAVIS_BRANCH}" == "master" ] || [[ "${TRAVIS_BRANCH}" == "branch-"* ]] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
   echo '======= Build, deploy and analyze master'
 
   # Fetch all commit history so that SonarQube has exact blame information
