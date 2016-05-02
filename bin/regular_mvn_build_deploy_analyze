@@ -72,7 +72,7 @@ elif [ "$TRAVIS_PULL_REQUEST" != "false" ] && [ -n "${GITHUB_TOKEN:-}" ]; then
   # in Maven local repository. Phase "verify" is enough.
 
   export MAVEN_OPTS="-Xmx1G -Xms128m"
-  if [ "$DEPLOY_PULL_REQUEST" == "true" ]; then
+  if [ "$DEPLOY_PULL_REQUEST:-" == "true" ]; then
     mvn org.jacoco:jacoco-maven-plugin:prepare-agent deploy sonar:sonar \
       -Pdeploy-sonarsource \
       -Dmaven.test.redirectTestOutputToFile=false \
