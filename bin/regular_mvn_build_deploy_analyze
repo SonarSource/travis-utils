@@ -59,7 +59,7 @@ elif [[ "${TRAVIS_BRANCH}" == "branch-"* ]] && [ "$TRAVIS_PULL_REQUEST" == "fals
 
   export MAVEN_OPTS="-Xmx1536m -Xms128m"
   mvn deploy \
-        -Pdeploy-sonarsource \
+        -Pdeploy-sonarsource,release \
         -B -e -V      
 
 elif [ "$TRAVIS_PULL_REQUEST" != "false" ] && [ -n "${GITHUB_TOKEN:-}" ]; then
