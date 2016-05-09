@@ -63,7 +63,7 @@ elif [[ "${TRAVIS_BRANCH}" == "branch-"* ]] && [ "$TRAVIS_PULL_REQUEST" == "fals
         -B -e -V      
 
 elif [ "$TRAVIS_PULL_REQUEST" != "false" ] && [ -n "${GITHUB_TOKEN:-}" ]; then
-  echo '======= Build and analyze pull request, deploy'
+  echo '======= Build and analyze pull request'
   
   # Do not deploy a SNAPSHOT version but the release version related to this build and PR
   set_maven_build_version $TRAVIS_BUILD_NUMBER
@@ -72,7 +72,8 @@ elif [ "$TRAVIS_PULL_REQUEST" != "false" ] && [ -n "${GITHUB_TOKEN:-}" ]; then
   # in Maven local repository. Phase "verify" is enough.
 
   export MAVEN_OPTS="-Xmx1G -Xms128m"
-  if [ "$DEPLOY_PULL_REQUEST:-" == "true" ]; then
+  if [ "${DEPLOY_PULL_REQUEST:-}" == "true" ]; then
+    echo '======= with deploy'
     mvn org.jacoco:jacoco-maven-plugin:prepare-agent deploy sonar:sonar \
       -Pdeploy-sonarsource \
       -Dmaven.test.redirectTestOutputToFile=false \
@@ -84,6 +85,7 @@ elif [ "$TRAVIS_PULL_REQUEST" != "false" ] && [ -n "${GITHUB_TOKEN:-}" ]; then
       -Dsonar.login=$SONAR_TOKEN \
       -B -e -V
     else
+    echo '======= no deploy'
     mvn org.jacoco:jacoco-maven-plugin:prepare-agent verify sonar:sonar \
       -Dmaven.test.redirectTestOutputToFile=false \
       -Dsonar.analysis.mode=issues \
