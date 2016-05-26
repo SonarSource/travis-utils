@@ -3,10 +3,20 @@
 set -euo pipefail
 
 BUILD_ID=$1
+RELEASE_SUFFIX=build$BUILD_ID
 CURRENT_VERSION=`maven_expression "project.version"`
 RELEASE_VERSION=`echo $CURRENT_VERSION | sed "s/-.*//g"`
-NEW_VERSION="$RELEASE_VERSION-build$BUILD_ID"
+
+if [ "${TYCHO_BUILD:-}" == "true" ]; then
+  NEW_VERSION="$RELEASE_VERSION.$RELEASE_SUFFIX"
+  # version 0.25.0 of tycho-versions-plugin requires Java 8
+  MVN_VERSION_PLUGIN="org.eclipse.tycho:tycho-versions-plugin:0.24.0:set-version"
+else
+  NEW_VERSION="$RELEASE_VERSION-$RELEASE_SUFFIX"
+  MVN_VERSION_PLUGIN="org.codehaus.mojo:versions-maven-plugin:2.2:set"
+  MVN_PROPERTIES="-DgenerateBackupPoms=false"
+fi
 
 echo "Replacing version $CURRENT_VERSION with $NEW_VERSION"
 
-mvn org.codehaus.mojo:versions-maven-plugin:2.2:set -DnewVersion=$NEW_VERSION -DgenerateBackupPoms=false -B -e
+mvn $MVN_VERSION_PLUGIN -DnewVersion=$NEW_VERSION ${MVN_PROPERTIES:=} -B -e
