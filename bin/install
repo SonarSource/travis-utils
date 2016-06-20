@@ -7,10 +7,6 @@ unset GEM_PATH GEM_HOME RAILS_ENV
 export TRAVIS_UTILS_HOME=$HOME/.local
 export DISPLAY=:99.0
 
-echo "Install jars into local maven repository"
-mkdir -p $HOME/.m2/repository
-cp -r $TRAVIS_UTILS_HOME/m2/repository/* $HOME/.m2/repository
-
 if [ ! -z "${ARTIFACTORY_PRIVATE_USERNAME:-}" ] && [ ! -z "${ARTIFACTORY_PRIVATE_PASSWORD:-}" ]; then
   echo "Copy private Maven settings"
   cp $TRAVIS_UTILS_HOME/m2/settings-private.xml $HOME/.m2/settings.xml
