@@ -4,14 +4,13 @@
 # and overwriteis the mvn command to run this Maven version instead of Travis' standard maven version (3.2.5)
 
 set -euo pipefail
-
+echo "Setup JDK 1.8u92"
 mkdir -p ~/jvm
 pushd ~/jvm
 if [ ! -d "jdk1.8.0_92" ]; then
   wget -c --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u92-b14/jdk-8u92-linux-x64.tar.gz
-  tar xzvf jdk-8u92-linux-x64.tar.gz
+  tar xzf jdk-8u92-linux-x64.tar.gz
 fi
 popd
 export JAVA_HOME=~/jvm/jdk1.8.0_92
 export PATH=$JAVA_HOME/bin:$PATH
-
