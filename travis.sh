@@ -62,3 +62,6 @@ assertFileContains $LOG_FILE "BUILD SUCCESS"
 echo "------- build sha1 (new run, to test cache)"
 build "SonarSource/parent-oss" "24" > $LOG_FILE
 assertFileContains $LOG_FILE "is already on cache"
+
+echo "------- install JDK8u92"
+. installJDK8
