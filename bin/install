@@ -14,3 +14,6 @@ else
   echo "Copy public Maven settings"
   cp $TRAVIS_UTILS_HOME/m2/settings-public.xml $HOME/.m2/settings.xml
 fi
+
+echo "Setting .npmrc"
+echo "registry=https://repox.sonarsource.com/npmjs/" > ~/.npmrc
