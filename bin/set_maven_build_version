@@ -6,16 +6,19 @@ BUILD_ID=$1
 CURRENT_VERSION=`maven_expression "project.version"`
 RELEASE_VERSION=`echo $CURRENT_VERSION | sed "s/-.*//g"`
 
-# In case of 2 digits, we need to add the 3rd digit (0 obviously)
-# Mandatory in order to compare versions (patch VS non patch)
-IFS=$'.'
-DIGIT_COUNT=`echo $RELEASE_VERSION | wc -w`
-unset IFS
-if [ $DIGIT_COUNT -lt 3 ]; then
-    RELEASE_VERSION="$RELEASE_VERSION.0"
-fi
+NEW_VERSION="$RELEASE_VERSION-build$BUILD_ID"
 
-NEW_VERSION="$RELEASE_VERSION.$BUILD_ID"
+if [ "${DO_NOT_USE_FORMER_VERSION_FORMAT:-}" == "true" ]; then
+    # In case of 2 digits, we need to add the 3rd digit (0 obviously)
+    # Mandatory in order to compare versions (patch VS non patch)
+    IFS=$'.'
+    DIGIT_COUNT=`echo $RELEASE_VERSION | wc -w`
+    unset IFS
+    if [ $DIGIT_COUNT -lt 3 ]; then
+        RELEASE_VERSION="$RELEASE_VERSION.0"
+    fi
+    NEW_VERSION="$RELEASE_VERSION.$BUILD_ID"
+fi
 
 echo "Replacing version $CURRENT_VERSION with $NEW_VERSION"
 
