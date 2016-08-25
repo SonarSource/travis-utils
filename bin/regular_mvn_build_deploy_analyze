@@ -34,7 +34,7 @@ if [ "${TRAVIS_BRANCH}" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; 
       -Dsonar.host.url=$SONAR_HOST_URL \
       -Dsonar.login=$SONAR_TOKEN \
       -Dsonar.projectVersion=$CURRENT_VERSION \
-      -B -e -V -DPROJECT_VERSION=$PROJECT_VERSION $*
+      -B -e -V $*
 
 elif [[ "${TRAVIS_BRANCH}" == "branch-"* ]] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
   # no dory analysis on release branch
@@ -57,7 +57,7 @@ elif [[ "${TRAVIS_BRANCH}" == "branch-"* ]] && [ "$TRAVIS_PULL_REQUEST" == "fals
     . set_maven_build_version $TRAVIS_BUILD_NUMBER
     mvn deploy \
       -Pdeploy-sonarsource,release \
-      -B -e -V -DPROJECT_VERSION=$PROJECT_VERSION $*
+      -B -e -V $*
   else
     echo "======= Found RELEASE version ======="
     mvn deploy \
@@ -86,7 +86,7 @@ elif [ "$TRAVIS_PULL_REQUEST" != "false" ] && [ -n "${GITHUB_TOKEN:-}" ]; then
       -Dsonar.github.oauth=$GITHUB_TOKEN \
       -Dsonar.host.url=$SONAR_HOST_URL \
       -Dsonar.login=$SONAR_TOKEN \
-      -B -e -V -DPROJECT_VERSION=$PROJECT_VERSION $*
+      -B -e -V $*
   else
     echo '======= no deploy'
     mvn org.jacoco:jacoco-maven-plugin:prepare-agent verify sonar:sonar \
