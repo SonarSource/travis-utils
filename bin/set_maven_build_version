@@ -4,7 +4,7 @@ set -euo pipefail
 
 BUILD_ID=$1
 CURRENT_VERSION=`maven_expression "project.version"`
-RELEASE_VERSION=`echo $CURRENT_VERSION | sed "s/-.*//g"`
+RELEASE_VERSION=`echo $CURRENT_VERSION | sed "s/-SNAPSHOT//g"`
 
 # In case of 2 digits, we need to add the 3rd digit (0 obviously)
 # Mandatory in order to compare versions (patch VS non patch)
