@@ -5,4 +5,4 @@
 
 set -euo pipefail
 
-mvn help:evaluate -Dexpression=$1 | grep -v '^\[\|Download\w\+\:'
+mvn help:evaluate -Dexpression=$1 | grep -v '^\[\|Download\w\+\:' | grep -v '\[WARNING\]'
