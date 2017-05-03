@@ -1,7 +1,11 @@
 #!/bin/bash
-# Usage: build_snapshot "user/project"
+# Usage: cancel_branch_build_with_pr
 #
 # Only work in travis environment with GITHUB_TOKEN env var set
+# when a job is cancelled it will appear as 
+#  - a cancelled job on travis
+#  - a cancelled job on burgr
+#  - a failed check in github commit statuses
 
 CURL_SILENT_CMD="curl --write-out %{http_code} --silent"
 CURL_VERBOSE_CMD="curl --write-out %{http_code}"
