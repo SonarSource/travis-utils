@@ -37,7 +37,7 @@ if [ "${TRAVIS_BRANCH}" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; 
       -B -e -V $*
 
 elif [[ "${TRAVIS_BRANCH}" == "branch-"* ]] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
-  # no dory analysis on release branch
+  # analyze maintenance branches as long-living branches
 
   # Fetch all commit history so that SonarQube has exact blame information
   # for issue auto-assignment
@@ -55,15 +55,22 @@ elif [[ "${TRAVIS_BRANCH}" == "branch-"* ]] && [ "$TRAVIS_PULL_REQUEST" == "fals
     echo "======= Found SNAPSHOT version ======="
     # Do not deploy a SNAPSHOT version but the release version related to this build
     . set_maven_build_version $TRAVIS_BUILD_NUMBER
-    mvn deploy \
+    mvn org.jacoco:jacoco-maven-plugin:prepare-agent deploy \
+      $MAVEN_ARGS \
       -Pdeploy-sonarsource,release \
       -B -e -V $*
   else
     echo "======= Found RELEASE version ======="
-    mvn deploy \
+    mvn org.jacoco:jacoco-maven-plugin:prepare-agent deploy \
+      $MAVEN_ARGS \
       -Pdeploy-sonarsource,release \
       -B -e -V $*
   fi
+  
+  mvn sonar:sonar \
+      -Dsonar.host.url=$SONAR_HOST_URL \
+      -Dsonar.login=$SONAR_TOKEN \
+      -Dsonar.branch.name=$TRAVIS_BRANCH
 
 elif [ "$TRAVIS_PULL_REQUEST" != "false" ] && [ -n "${GITHUB_TOKEN:-}" ]; then
   echo '======= Build and analyze pull request'
