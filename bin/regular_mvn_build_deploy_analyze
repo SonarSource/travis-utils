@@ -106,6 +106,16 @@ elif [ "$TRAVIS_PULL_REQUEST" != "false" ] && [ -n "${GITHUB_TOKEN:-}" ]; then
       -Dsonar.login=$SONAR_TOKEN \
       -B -e -V $*
   fi
+  
+  if [ "$TRAVIS_BRANCH" == "master" ]; then
+      # analysis of short-living branch based on another short-living branch
+      # is currently not supported
+      mvn sonar:sonar \
+          -Dsonar.host.url=$SONAR_HOST_URL \
+          -Dsonar.login=$SONAR_TOKEN \
+          -Dsonar.branch.name=$TRAVIS_PULL_REQUEST_BRANCH \
+          -Dsonar.branch.target=$TRAVIS_BRANCH
+  fi
 
 else
   echo '======= Build, no analysis, no deploy'
