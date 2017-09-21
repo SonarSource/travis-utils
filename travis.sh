@@ -27,14 +27,14 @@ installTravisTools
 echo "------ test maven_expression and set_maven_build_version"
 cd tests
 EXPRESSION=`maven_expression "project.version"`
-if [ ! "$EXPRESSION" = "0.1-SNAPSHOT"]; then
+if [ ! "$EXPRESSION" = "0.1-SNAPSHOT" ]; then
   echo "Got $EXPRESSION instead of 0.1-SNAPSHOT"
   exit 1
 fi
 set_maven_build_version "1234"
 EXPRESSION=`maven_expression "project.version"`
-if [! "$EXPRESSION" = "0.1-build1234"]; then
-  echo "Got $EXPRESSION instead of 0.1-build1234"
+if [ ! "$EXPRESSION" = "0.1.0.1234" ]; then
+  echo "Got $EXPRESSION instead of 0.1.0.1234"
   exit 1
 fi
 cd -
