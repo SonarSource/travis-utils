@@ -60,13 +60,11 @@ elif [[ "${TRAVIS_BRANCH}" == "branch-"* ]] && [ "$TRAVIS_PULL_REQUEST" == "fals
     # Do not deploy a SNAPSHOT version but the release version related to this build
     . set_maven_build_version $TRAVIS_BUILD_NUMBER
     mvn org.jacoco:jacoco-maven-plugin:prepare-agent deploy \
-      $MAVEN_ARGS \
       -Pdeploy-sonarsource,release \
       -B -e -V $*
   else
     echo "======= Found RELEASE version ======="
     mvn org.jacoco:jacoco-maven-plugin:prepare-agent deploy \
-      $MAVEN_ARGS \
       -Pdeploy-sonarsource,release \
       -B -e -V $*
   fi
@@ -96,7 +94,7 @@ elif [ "$TRAVIS_PULL_REQUEST" != "false" ] && [ -n "${GITHUB_TOKEN:-}" ]; then
     mvn org.jacoco:jacoco-maven-plugin:prepare-agent deploy sonar:sonar \
       -Pdeploy-sonarsource \
       -Dmaven.test.redirectTestOutputToFile=false \
-      -Dsonar.analysis.mode=issues \
+      -Dsonar.analysis.mode=preview \
       -Dsonar.github.pullRequest=$TRAVIS_PULL_REQUEST \
       -Dsonar.github.repository=$TRAVIS_REPO_SLUG \
       -Dsonar.github.oauth=$GITHUB_TOKEN \
@@ -107,7 +105,7 @@ elif [ "$TRAVIS_PULL_REQUEST" != "false" ] && [ -n "${GITHUB_TOKEN:-}" ]; then
     echo '======= no deploy'
     mvn org.jacoco:jacoco-maven-plugin:prepare-agent verify sonar:sonar \
       -Dmaven.test.redirectTestOutputToFile=false \
-      -Dsonar.analysis.mode=issues \
+      -Dsonar.analysis.mode=preview \
       -Dsonar.github.pullRequest=$TRAVIS_PULL_REQUEST \
       -Dsonar.github.repository=$TRAVIS_REPO_SLUG \
       -Dsonar.github.oauth=$GITHUB_TOKEN \
@@ -119,14 +117,15 @@ elif [ "$TRAVIS_PULL_REQUEST" != "false" ] && [ -n "${GITHUB_TOKEN:-}" ]; then
   mvn sonar:sonar \
       -Dsonar.host.url=$SONAR_HOST_URL \
       -Dsonar.login=$SONAR_TOKEN \
-      -Dsonar.branch.name=$TRAVIS_PULL_REQUEST_BRANCH \
-      -Dsonar.branch.target=$TRAVIS_BRANCH \
       -Dsonar.analysis.buildNumber=$TRAVIS_BUILD_NUMBER \
       -Dsonar.analysis.pipeline=$TRAVIS_BUILD_NUMBER \
       -Dsonar.analysis.sha1=$TRAVIS_PULL_REQUEST_SHA  \
       -Dsonar.analysis.repository=$TRAVIS_REPO_SLUG \
       -Dsonar.analysis.prNumber=$TRAVIS_PULL_REQUEST
-
+      -Dsonar.branch.name=$TRAVIS_PULL_REQUEST_BRANCH \
+      -Dsonar.branch.target=$TRAVIS_BRANCH
+      
+>>>>>>> master
 else
   echo '======= Build, no analysis, no deploy'
 
