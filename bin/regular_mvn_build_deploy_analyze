@@ -124,7 +124,7 @@ elif [ "$TRAVIS_PULL_REQUEST" != "false" ] && [ -n "${GITHUB_TOKEN:-}" ]; then
       -Dsonar.analysis.prNumber=$TRAVIS_PULL_REQUEST \
       -Dsonar.branch.name=$TRAVIS_PULL_REQUEST_BRANCH \
       -Dsonar.branch.target=$TRAVIS_BRANCH
-
+      
 else
   echo '======= Build, no analysis, no deploy'
 
