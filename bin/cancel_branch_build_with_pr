@@ -8,10 +8,6 @@
 # Requires the environment variable GITHUB_TOKEN to check if a pull
 # request is open
 
-CURL_SILENT_CMD="curl --write-out %{http_code} --silent"
-CURL_VERBOSE_CMD="curl --write-out %{http_code}"
-CURL_CMD=$CURL_VERBOSE_CMD
-
 if [[ $TRAVIS_BRANCH != *"master" ]]; then
     if [ -n "${GITHUB_TOKEN:-}" ]; then    
         if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then 
