@@ -1,11 +1,12 @@
 #!/bin/bash
-# Usage: cancel_branch_build_with_pr
+# Usage: cancel_branch_build_with_pr || if [[ $? -eq 1 ]]; then exit 0; fi
 #
-# Only work in travis environment with GITHUB_TOKEN env var set
-# when a job is cancelled it will appear as 
-#  - a cancelled job on travis
-#  - a cancelled job on burgr
-#  - a failed check in github commit statuses
+# Missing feature at Travis: cancel build of a branch when a pull
+# request is open on the same branch. The build will be considered as
+# successful.
+#
+# Requires the environment variable GITHUB_TOKEN to check if a pull
+# request is open
 
 CURL_SILENT_CMD="curl --write-out %{http_code} --silent"
 CURL_VERBOSE_CMD="curl --write-out %{http_code}"
@@ -25,12 +26,7 @@ if [[ $TRAVIS_BRANCH != *"master" ]]; then
 
             if [ "$PULL_REQUEST_STATUS" == "open" ]; then
                 echo "======= branch with open pull request, canceling the build ======="                
-                TRAVIS_TOKEN=`curl --silent -X POST -H "Content-Type:application/json" -H "User-Agent: Travis/travis_utils" $TRAVIS_API_URL/auth/github --data "{ \"github_token\": \"$GITHUB_TOKEN\" }" | jq -r .access_token`
-                #cancel travis job
-                curl -X POST -H "Travis-API-Version: 3" \
-                    -H "User-Agent: Travis/travis_utils" \
-                    -H "Authorization: token $TRAVIS_TOKEN" \
-                    $TRAVIS_API_URL/build/$TRAVIS_BUILD_ID/cancel                
+                exit 1
             else
                 echo "======= branch with no open pull request, building ======="
             fi
