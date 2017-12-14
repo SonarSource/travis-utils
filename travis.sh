@@ -23,6 +23,7 @@ function assertFileContains {
 }
 
 installTravisTools
+. ~/.local/bin/installMaven35
 
 echo "------ test maven_expression and set_maven_build_version"
 cd tests
