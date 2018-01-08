@@ -1,19 +1,9 @@
 #!/bin/bash
 
-# download and unzip Maven 3.5.x to ~/maven directory
-# and overwrite the mvn command to run this Maven version instead of Travis' standard maven version (3.2.5)
+# download and unzip Maven 3.5.2 to ~/maven directory
+# and overwrite the mvn command to run this Maven version instead of Travis' standard maven version (3.5.2)
 
 set -euo pipefail
 
-echo "Setup Maven"
-mkdir -p ~/maven
-pushd ~/maven > /dev/null
-if [ ! -d "apache-maven-3.5.0" ]; then
-  echo "Download Maven 3.5"
-  wget --quiet --continue  https://archive.apache.org/dist/maven/maven-3/3.5.0/binaries/apache-maven-3.5.0-bin.zip 
-  unzip apache-maven-3.5.0-bin.zip -d ~/maven> /dev/null
-fi
-popd > /dev/null
-export M2_HOME=~/maven/apache-maven-3.5.0
-export PATH=$M2_HOME/bin:$PATH
+. installMaven 3.5.2
 
