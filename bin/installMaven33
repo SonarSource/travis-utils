@@ -5,14 +5,4 @@
 
 set -euo pipefail
 
-echo "Setup Maven"
-mkdir -p ~/maven
-pushd ~/maven > /dev/null
-if [ ! -d "apache-maven-3.5.0" ]; then
-  echo "Download Maven 3.5"
-  wget --quiet --continue  https://archive.apache.org/dist/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.zip 
-  unzip apache-maven-3.3.9-bin.zip -d ~/maven> /dev/null
-fi
-popd > /dev/null
-export M2_HOME=~/maven/apache-maven-3.3.9
-export PATH=$M2_HOME/bin:$PATH
+. installMaven 3.3.9
