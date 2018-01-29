@@ -5,14 +5,20 @@
 
 set -euo pipefail
 
-echo "Setup Maven"
+echo "Setup Maven $1"
 mkdir -p ~/maven
 pushd ~/maven > /dev/null
 if [ ! -d "apache-maven-$1" ]; then
   echo "Download Maven $1"
-  wget --quiet --continue  "https://archive.apache.org/dist/maven/maven-3/$1/binaries/apache-maven-$1-bin.zip" 
+  {
+    wget --quiet --continue  "https://archive.apache.org/dist/maven/maven-3/$1/binaries/apache-maven-$1-bin.zip" 
+  } || {
+    echo "failed to download Maven $1"
+    exit 1
+  }
   unzip "apache-maven-$1-bin.zip" -d ~/maven > /dev/null
 fi
 popd > /dev/null
 export M2_HOME=~/maven/apache-maven-$1
 export PATH=$M2_HOME/bin:$PATH
+echo "Maven $1 installed"
