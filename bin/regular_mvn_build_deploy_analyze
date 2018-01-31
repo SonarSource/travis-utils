@@ -126,6 +126,31 @@ elif [ "$TRAVIS_PULL_REQUEST" != "false" ] && [ -n "${GITHUB_TOKEN:-}" ]; then
       -B -e -V $*
   fi
 
+elif [[ "$TRAVIS_BRANCH" == "dogfood-on-"* ]] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
+  echo '======= Build dogfood branch'
+
+    # get current version from pom
+  CURRENT_VERSION=`maven_expression "project.version"`
+
+  if [[ $CURRENT_VERSION =~ "-SNAPSHOT" ]]; then
+    echo "======= Found SNAPSHOT version ======="
+    # Do not deploy a SNAPSHOT version but the release version related to this build
+    . set_maven_build_version $TRAVIS_BUILD_NUMBER
+    mvn org.jacoco:jacoco-maven-plugin:prepare-agent deploy \
+      -Pdeploy-sonarsource,release \
+      -B -e -V $*
+  else
+    echo "======= Found RELEASE version ======="
+    mvn org.jacoco:jacoco-maven-plugin:prepare-agent deploy \
+      -Pdeploy-sonarsource,release \
+      -B -e -V $*
+  fi
+
+
+  mvn org.jacoco:jacoco-maven-plugin:prepare-agent deploy \
+    -Pdeploy-sonarsource,release \
+    -B -e -V $*
+        
 else
   echo '======= Build, no analysis, no deploy'
 
