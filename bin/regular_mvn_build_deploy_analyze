@@ -101,9 +101,11 @@ elif [ "$TRAVIS_PULL_REQUEST" != "false" ] && [ -n "${GITHUB_TOKEN:-}" ]; then
       -Dsonar.analysis.sha1=$TRAVIS_PULL_REQUEST_SHA  \
       -Dsonar.analysis.repository=$TRAVIS_REPO_SLUG \
       -Dsonar.analysis.prNumber=$TRAVIS_PULL_REQUEST \
-      -Dsonar.branch.name=$TRAVIS_PULL_REQUEST_BRANCH \
-      -Dsonar.branch.target=$TRAVIS_BRANCH \
+      -Dsonar.pullrequest.branch=$TRAVIS_PULL_REQUEST_BRANCH \
+      -Dsonar.pullrequest.base=$TRAVIS_BRANCH \
       -Dsonar.pullrequest.id=$TRAVIS_PULL_REQUEST \
+      -Dsonar.pullrequest.provider=github \
+      -Dsonar.pullrequest.github.repository=$TRAVIS_REPO_SLUG \
       -B -e -V $*
   else
     echo '======= no deploy'
@@ -116,9 +118,11 @@ elif [ "$TRAVIS_PULL_REQUEST" != "false" ] && [ -n "${GITHUB_TOKEN:-}" ]; then
       -Dsonar.analysis.sha1=$TRAVIS_PULL_REQUEST_SHA  \
       -Dsonar.analysis.repository=$TRAVIS_REPO_SLUG \
       -Dsonar.analysis.prNumber=$TRAVIS_PULL_REQUEST \
-      -Dsonar.branch.name=$TRAVIS_PULL_REQUEST_BRANCH \
-      -Dsonar.branch.target=$TRAVIS_BRANCH \
+      -Dsonar.pullrequest.branch=$TRAVIS_PULL_REQUEST_BRANCH \
+      -Dsonar.pullrequest.base=$TRAVIS_BRANCH \
       -Dsonar.pullrequest.id=$TRAVIS_PULL_REQUEST \
+      -Dsonar.pullrequest.provider=github \
+      -Dsonar.pullrequest.github.repository=$TRAVIS_REPO_SLUG \
       -B -e -V $*
   fi
 
