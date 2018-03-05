@@ -103,7 +103,7 @@ elif [ "$TRAVIS_PULL_REQUEST" != "false" ] && [ -n "${GITHUB_TOKEN:-}" ]; then
       -Dsonar.analysis.prNumber=$TRAVIS_PULL_REQUEST \
       -Dsonar.pullrequest.branch=$TRAVIS_PULL_REQUEST_BRANCH \
       -Dsonar.pullrequest.base=$TRAVIS_BRANCH \
-      -Dsonar.pullrequest.id=$TRAVIS_PULL_REQUEST \
+      -Dsonar.pullrequest.key=$TRAVIS_PULL_REQUEST \
       -Dsonar.pullrequest.provider=github \
       -Dsonar.pullrequest.github.repository=$TRAVIS_REPO_SLUG \
       -B -e -V $*
@@ -120,7 +120,7 @@ elif [ "$TRAVIS_PULL_REQUEST" != "false" ] && [ -n "${GITHUB_TOKEN:-}" ]; then
       -Dsonar.analysis.prNumber=$TRAVIS_PULL_REQUEST \
       -Dsonar.pullrequest.branch=$TRAVIS_PULL_REQUEST_BRANCH \
       -Dsonar.pullrequest.base=$TRAVIS_BRANCH \
-      -Dsonar.pullrequest.id=$TRAVIS_PULL_REQUEST \
+      -Dsonar.pullrequest.key=$TRAVIS_PULL_REQUEST \
       -Dsonar.pullrequest.provider=github \
       -Dsonar.pullrequest.github.repository=$TRAVIS_REPO_SLUG \
       -B -e -V $*
