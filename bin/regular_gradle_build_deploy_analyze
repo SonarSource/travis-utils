@@ -1,0 +1,102 @@
+#!/bin/bash
+# Regular way to build a SonarSource Maven project on Travis.
+# Requires the environment variables:
+# - SONAR_HOST_URL: URL of SonarQube server
+# - SONAR_TOKEN: access token to send analysis reports to $SONAR_HOST_URL
+# - GITHUB_TOKEN: access token to send analysis of pull requests to GibHub
+# - ARTIFACTORY_URL: URL to Artifactory repository
+# - ARTIFACTORY_DEPLOY_REPO: name of deployment repository
+# - ARTIFACTORY_DEPLOY_USERNAME: login to deploy to $ARTIFACTORY_DEPLOY_REPO
+# - ARTIFACTORY_DEPLOY_PASSWORD: password to deploy to $ARTIFACTORY_DEPLOY_REPO
+
+set -euo pipefail
+
+# Used by Next
+export INITIAL_VERSION=$(cat gradle.properties | grep version | awk -F= '{print $2}')
+
+#
+# use generic environments to remove coupling with (and fix) Travis
+#
+export GIT_COMMIT=$TRAVIS_COMMIT
+export BUILD_NUMBER=$TRAVIS_BUILD_NUMBER
+if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
+  export GIT_BRANCH=$TRAVIS_BRANCH
+  unset PULL_REQUEST_BRANCH_TARGET
+  unset PULL_REQUEST_NUMBER
+else
+  export GIT_BRANCH=$TRAVIS_PULL_REQUEST_BRANCH
+  export PULL_REQUEST_BRANCH_TARGET=$TRAVIS_BRANCH
+  export PULL_REQUEST_NUMBER=$TRAVIS_PULL_REQUEST
+fi
+
+# Fetch all commit history so that SonarQube has exact blame information
+# for issue auto-assignment
+# This command can fail with "fatal: --unshallow on a complete repository does not make sense"
+# if there are not enough commits in the Git repository (even if Travis executed git clone --depth 50).
+# For this reason errors are ignored with "|| true"
+git fetch --unshallow || true
+
+if [ "${TRAVIS_BRANCH}" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
+  echo '======= Build, deploy and analyze master'
+
+  ./gradlew --no-daemon --console plain \
+    -DbuildNumber=$BUILD_NUMBER \
+    build sonarqube artifactoryPublish \
+    -Dsonar.host.url=$SONAR_HOST_URL \
+    -Dsonar.login=$SONAR_TOKEN \
+    -Dsonar.projectVersion=$INITIAL_VERSION \
+    -Dsonar.analysis.buildNumber=$BUILD_NUMBER \
+    -Dsonar.analysis.pipeline=$BUILD_NUMBER \
+    -Dsonar.analysis.sha1=$GIT_COMMIT \
+    -Dsonar.analysis.repository=$TRAVIS_REPO_SLUG \
+    $*
+
+elif [[ "${TRAVIS_BRANCH}" == "branch-"* ]] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
+  # analyze maintenance branches as long-living branches
+  echo '======= Build, deploy and analyze maintenance branch'
+
+  ./gradlew --no-daemon --console plain \
+    -DbuildNumber=$BUILD_NUMBER \
+    build sonarqube artifactoryPublish \
+    -Dsonar.host.url=$SONAR_HOST_URL \
+    -Dsonar.login=$SONAR_TOKEN \
+    -Dsonar.branch.name=$TRAVIS_BRANCH \
+    -Dsonar.projectVersion=$INITIAL_VERSION \
+    -Dsonar.analysis.buildNumber=$BUILD_NUMBER \
+    -Dsonar.analysis.pipeline=$BUILD_NUMBER \
+    -Dsonar.analysis.sha1=$GIT_COMMIT \
+    -Dsonar.analysis.repository=$TRAVIS_REPO_SLUG \
+    $*
+
+
+elif [ "$TRAVIS_PULL_REQUEST" != "false" ] && [ -n "${GITHUB_TOKEN:-}" ]; then
+  echo '======= Build and analyze pull request'
+
+  ./gradlew --no-daemon --console plain \
+    -DbuildNumber=$BUILD_NUMBER \
+    build sonarqube artifactoryPublish \
+    -Dsonar.host.url=$SONAR_HOST_URL \
+    -Dsonar.login=$SONAR_TOKEN \
+    -Dsonar.branch.name=$TRAVIS_PULL_REQUEST_BRANCH \
+    -Dsonar.branch.target=$TRAVIS_BRANCH \
+    -Dsonar.analysis.buildNumber=$BUILD_NUMBER \
+    -Dsonar.analysis.pipeline=$BUILD_NUMBER \
+    -Dsonar.analysis.sha1=$TRAVIS_PULL_REQUEST_SHA \
+    -Dsonar.analysis.prNumber=$TRAVIS_PULL_REQUEST \
+    -Dsonar.analysis.repository=$TRAVIS_REPO_SLUG \
+    -Dsonar.pullrequest.id=$TRAVIS_PULL_REQUEST \
+    -Dsonar.pullrequest.github.id=$TRAVIS_PULL_REQUEST \
+    -Dsonar.pullrequest.github.repository=$TRAVIS_REPO_SLUG \
+    $*
+
+elif [[ "$TRAVIS_BRANCH" == "dogfood-on-"* ]] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
+  echo '======= Build and deploy dogfood branch'
+
+  ./gradlew --no-daemon --console plain build artifactoryPublish -DbuildNumber=$BUILD_NUMBER $*
+        
+else
+  echo '======= Build, no analysis, no deploy'
+
+  ./gradlew --no-daemon --console plain build $*
+  
+fi
