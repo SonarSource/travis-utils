@@ -93,7 +93,23 @@ elif [[ "$TRAVIS_BRANCH" == "dogfood-on-"* ]] && [ "$TRAVIS_PULL_REQUEST" == "fa
   echo '======= Build and deploy dogfood branch'
 
   ./gradlew --no-daemon --console plain build artifactoryPublish -DbuildNumber=$BUILD_NUMBER $*
-        
+
+elif [[ "$TRAVIS_BRANCH" == "feature/long/"* ]] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
+  echo '======= Build and analyze long lived feature branch'
+
+  ./gradlew --no-daemon --console plain \
+    -DbuildNumber=$BUILD_NUMBER \
+    build sonarqube \
+    -Dsonar.host.url=$SONAR_HOST_URL \
+    -Dsonar.login=$SONAR_TOKEN \
+    -Dsonar.branch.name=$TRAVIS_BRANCH \
+    -Dsonar.projectVersion=$INITIAL_VERSION \
+    -Dsonar.analysis.buildNumber=$BUILD_NUMBER \
+    -Dsonar.analysis.pipeline=$BUILD_NUMBER \
+    -Dsonar.analysis.sha1=$GIT_COMMIT \
+    -Dsonar.analysis.repository=$TRAVIS_REPO_SLUG \
+    $*
+
 else
   echo '======= Build, no analysis, no deploy'
 

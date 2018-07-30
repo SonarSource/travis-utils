@@ -137,6 +137,20 @@ elif [[ "$TRAVIS_BRANCH" == "dogfood-on-"* ]] && [ "$TRAVIS_PULL_REQUEST" == "fa
   mvn deploy \
     -Pdeploy-sonarsource,release \
     -B -e -V $*
+
+elif [[ "$TRAVIS_BRANCH" == "feature/long/"* ]] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
+  echo '======= Build and analyze long lived feature branch'
+    
+  mvn org.jacoco:jacoco-maven-plugin:prepare-agent verify sonar:sonar \
+    -Dmaven.test.redirectTestOutputToFile=false \
+    -Dsonar.host.url=$SONAR_HOST_URL \
+    -Dsonar.login=$SONAR_TOKEN \
+    -Dsonar.branch.name=$TRAVIS_BRANCH \
+    -Dsonar.analysis.buildNumber=$TRAVIS_BUILD_NUMBER \
+    -Dsonar.analysis.pipeline=$TRAVIS_BUILD_NUMBER \
+    -Dsonar.analysis.sha1=$TRAVIS_COMMIT  \
+    -Dsonar.analysis.repository=$TRAVIS_REPO_SLUG \
+    -B -e -V $*    
         
 else
   echo '======= Build, no analysis, no deploy'
