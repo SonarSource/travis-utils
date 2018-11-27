@@ -77,15 +77,15 @@ elif [ "$TRAVIS_PULL_REQUEST" != "false" ] && [ -n "${GITHUB_TOKEN:-}" ]; then
     build sonarqube artifactoryPublish \
     -Dsonar.host.url=$SONAR_HOST_URL \
     -Dsonar.login=$SONAR_TOKEN \
-    -Dsonar.branch.name=$TRAVIS_PULL_REQUEST_BRANCH \
-    -Dsonar.branch.target=$TRAVIS_BRANCH \
     -Dsonar.analysis.buildNumber=$BUILD_NUMBER \
     -Dsonar.analysis.pipeline=$BUILD_NUMBER \
-    -Dsonar.analysis.sha1=$TRAVIS_PULL_REQUEST_SHA \
-    -Dsonar.analysis.prNumber=$TRAVIS_PULL_REQUEST \
+    -Dsonar.analysis.sha1=$TRAVIS_PULL_REQUEST_SHA  \
     -Dsonar.analysis.repository=$TRAVIS_REPO_SLUG \
-    -Dsonar.pullrequest.id=$TRAVIS_PULL_REQUEST \
-    -Dsonar.pullrequest.github.id=$TRAVIS_PULL_REQUEST \
+    -Dsonar.analysis.prNumber=$TRAVIS_PULL_REQUEST \
+    -Dsonar.pullrequest.branch=$TRAVIS_PULL_REQUEST_BRANCH \
+    -Dsonar.pullrequest.base=$TRAVIS_BRANCH \
+    -Dsonar.pullrequest.key=$TRAVIS_PULL_REQUEST \
+    -Dsonar.pullrequest.provider=github \
     -Dsonar.pullrequest.github.repository=$TRAVIS_REPO_SLUG \
     $*
 
@@ -103,10 +103,9 @@ elif [[ "$TRAVIS_BRANCH" == "feature/long/"* ]] && [ "$TRAVIS_PULL_REQUEST" == "
     -Dsonar.host.url=$SONAR_HOST_URL \
     -Dsonar.login=$SONAR_TOKEN \
     -Dsonar.branch.name=$TRAVIS_BRANCH \
-    -Dsonar.projectVersion=$INITIAL_VERSION \
     -Dsonar.analysis.buildNumber=$BUILD_NUMBER \
     -Dsonar.analysis.pipeline=$BUILD_NUMBER \
-    -Dsonar.analysis.sha1=$GIT_COMMIT \
+    -Dsonar.analysis.sha1=$GIT_COMMIT  \
     -Dsonar.analysis.repository=$TRAVIS_REPO_SLUG \
     $*
 
