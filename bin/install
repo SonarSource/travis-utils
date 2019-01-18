@@ -16,4 +16,4 @@ else
 fi
 
 echo "Setting .npmrc"
-echo "registry = https://repox.sonarsource.com/api/npm/npm" > ~/.npmrc
+echo "registry = ${ARTIFACTORY_URL}/api/npm/npm" > ~/.npmrc
