@@ -28,8 +28,8 @@ if [ "${TRAVIS_BRANCH}" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; 
   . set_maven_build_version $TRAVIS_BUILD_NUMBER
 
   export MAVEN_OPTS="-Xmx1536m -Xms128m"
-  mvn org.jacoco:jacoco-maven-plugin:prepare-agent deploy sonar:sonar \
-      -Pcoverage-per-test,deploy-sonarsource,release \
+  mvn deploy sonar:sonar \
+      -Pcoverage,deploy-sonarsource,release \
       -Dmaven.test.redirectTestOutputToFile=false \
       -Dsonar.host.url=$SONAR_HOST_URL \
       -Dsonar.login=$SONAR_TOKEN \
@@ -59,13 +59,13 @@ elif [[ "${TRAVIS_BRANCH}" == "branch-"* ]] && [ "$TRAVIS_PULL_REQUEST" == "fals
     echo "======= Found SNAPSHOT version ======="
     # Do not deploy a SNAPSHOT version but the release version related to this build
     . set_maven_build_version $TRAVIS_BUILD_NUMBER
-    mvn org.jacoco:jacoco-maven-plugin:prepare-agent deploy \
-      -Pdeploy-sonarsource,release \
+    mvn deploy \
+      -Pcoverage,deploy-sonarsource,release \
       -B -e -V $*
   else
     echo "======= Found RELEASE version ======="
-    mvn org.jacoco:jacoco-maven-plugin:prepare-agent deploy \
-      -Pdeploy-sonarsource,release \
+    mvn deploy \
+      -Pcoverage,deploy-sonarsource,release \
       -B -e -V $*
   fi
 
@@ -91,8 +91,8 @@ elif [ "$TRAVIS_PULL_REQUEST" != "false" ] && [ -n "${GITHUB_TOKEN:-}" ]; then
   export MAVEN_OPTS="-Xmx1G -Xms128m"
   if [ "${DEPLOY_PULL_REQUEST:-}" == "true" ]; then
     echo '======= with deploy'
-    mvn org.jacoco:jacoco-maven-plugin:prepare-agent deploy sonar:sonar \
-      -Pdeploy-sonarsource \
+    mvn deploy sonar:sonar \
+      -Pcoverage,deploy-sonarsource \
       -Dmaven.test.redirectTestOutputToFile=false \
       -Dsonar.host.url=$SONAR_HOST_URL \
       -Dsonar.login=$SONAR_TOKEN \
@@ -109,7 +109,8 @@ elif [ "$TRAVIS_PULL_REQUEST" != "false" ] && [ -n "${GITHUB_TOKEN:-}" ]; then
       -B -e -V $*
   else
     echo '======= no deploy'
-    mvn org.jacoco:jacoco-maven-plugin:prepare-agent verify sonar:sonar \
+    mvn verify sonar:sonar \
+      -Pcoverage \
       -Dmaven.test.redirectTestOutputToFile=false \
       -Dsonar.host.url=$SONAR_HOST_URL \
       -Dsonar.login=$SONAR_TOKEN \
@@ -141,7 +142,8 @@ elif [[ "$TRAVIS_BRANCH" == "dogfood-on-"* ]] && [ "$TRAVIS_PULL_REQUEST" == "fa
 elif [[ "$TRAVIS_BRANCH" == "feature/long/"* ]] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
   echo '======= Build and analyze long lived feature branch'
     
-  mvn org.jacoco:jacoco-maven-plugin:prepare-agent verify sonar:sonar \
+  mvn verify sonar:sonar \
+    -Pcoverage \
     -Dmaven.test.redirectTestOutputToFile=false \
     -Dsonar.host.url=$SONAR_HOST_URL \
     -Dsonar.login=$SONAR_TOKEN \
