@@ -3,15 +3,14 @@
 # download and unzip jdk8 to ~/jvm directory
 
 set -euo pipefail
-JDK_RELEASE=201
+JDK_RELEASE=212
 echo "Setup JDK 1.8u$JDK_RELEASE"
 mkdir -p ~/jvm
 pushd ~/jvm > /dev/null
 
 if [ ! -d "jdk1.8.0_$JDK_RELEASE" ]; then
-  {
-    
-    wget --quiet --continue --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u201-b09/42970487e3af4f5aa5bca3f542482c60/jdk-8u201-linux-x64.tar.gz
+  { 
+    wget --quiet --continue --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u212-b10/59066701cf1a433da9770636fbc4c9aa/jdk-8u212-linux-x64.tar.gz
   } || {
     echo "failed to download JDK 1.8u$JDK_RELEASE"
     exit 1
