@@ -8,7 +8,7 @@ echo "Setup $JDK_RELEASE"
 mkdir -p ~/jvm
 pushd ~/jvm > /dev/null
 
-if [ ! -d "$JDK_RELEASE-linux-x64.tar.gz" ]; then
+if [ ! -d "$JDK_RELEASE" ]; then
   {
     curl -L "https://api.adoptopenjdk.net/v2/binary/releases/openjdk8?openjdk_impl=hotspot&os=linux&arch=x64&release=$JDK_RELEASE&type=jdk" --output $JDK_RELEASE-linux-x64.tar.gz
   } || {
@@ -19,6 +19,7 @@ if [ ! -d "$JDK_RELEASE-linux-x64.tar.gz" ]; then
   rm $JDK_RELEASE-linux-x64.tar.gz
 fi
 popd > /dev/null
-export JAVA_HOME=~/jvm/jdk1.8.0_$JDK_RELEASE
+export JAVA_HOME=~/jvm/$JDK_RELEASE
 export PATH=$JAVA_HOME/bin:$PATH
 echo "JDK 1.8u_$JDK_RELEASE installed"
+java -version
