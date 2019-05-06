@@ -3,23 +3,23 @@
 # download and unzip jdk8 to ~/jvm directory
 
 set -euo pipefail
-JDK_RELEASE=201
-echo "Setup JDK 1.8u$JDK_RELEASE"
+JDK_RELEASE=jdk8u212-b03
+echo "Setup $JDK_RELEASE"
 mkdir -p ~/jvm
 pushd ~/jvm > /dev/null
 
-if [ ! -d "jdk1.8.0_$JDK_RELEASE" ]; then
+if [ ! -d "$JDK_RELEASE" ]; then
   {
-    
-    wget --quiet --continue --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u201-b09/42970487e3af4f5aa5bca3f542482c60/jdk-8u201-linux-x64.tar.gz
+    curl -L "https://api.adoptopenjdk.net/v2/binary/releases/openjdk8?openjdk_impl=hotspot&os=linux&arch=x64&release=$JDK_RELEASE&type=jdk" --output $JDK_RELEASE-linux-x64.tar.gz
   } || {
-    echo "failed to download JDK 1.8u$JDK_RELEASE"
+    echo "failed to download JDK $JDK_RELEASE"
     exit 1
   }
-  tar xzf jdk-8u$JDK_RELEASE-linux-x64.tar.gz
-  rm jdk-8u$JDK_RELEASE-linux-x64.tar.gz
+  tar xzf $JDK_RELEASE-linux-x64.tar.gz
+  rm $JDK_RELEASE-linux-x64.tar.gz
 fi
 popd > /dev/null
-export JAVA_HOME=~/jvm/jdk1.8.0_$JDK_RELEASE
+export JAVA_HOME=~/jvm/$JDK_RELEASE
 export PATH=$JAVA_HOME/bin:$PATH
-echo "JDK 1.8u$JDK_RELEASE installed"
+echo "JDK 1.8u_$JDK_RELEASE installed"
+java -version
