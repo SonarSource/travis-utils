@@ -1,0 +1,39 @@
+#!/bin/bash
+# Sets up the environment to be able to send notifications to burgr and do promotions and releases using the Repox API.
+# Usage: setup_promote_environment
+
+export GITHUB_REPO=${TRAVIS_REPO_SLUG} # CIRRUS_REPO_FULL_NAME
+SPLIT_NAME=(${TRAVIS_REPO_SLUG//\// })
+export PROJECT_NAME=${SPLIT_NAME[1]}
+export BUILD_NUMBER=${TRAVIS_BUILD_NUMBER} # cirrusBuildNumber() in cirrus-env script...
+export PULL_REQUEST_NUMBER=${TRAVIS_PULL_REQUEST} # ${CIRRUS_PR:-false}
+export PIPELINE_ID=${TRAVIS_BUILD_ID} # CIRRUS_BUILD_ID
+
+export ARTIFACT_URL="$ARTIFACTORY_URL/webapp/#/builds/$PROJECT_NAME/$BUILD_NUMBER"
+
+if [ -z $TRAVIS_PULL_REQUEST_SHA ]; then
+  export GIT_SHA1=${TRAVIS_COMMIT} # $CIRRUS_CHANGE_IN_REPO
+  export GITHUB_BRANCH_NAME=${TRAVIS_BRANCH} #$CIRRUS_BRANCH
+  export STAGE_TYPE="branch"
+  export STAGE_ID=${GITHUB_BRANCH_NAME}
+else
+  export GIT_SHA1=${TRAVIS_PULL_REQUEST_SHA}
+  export GITHUB_BRANCH_NAME=${TRAVIS_PULL_REQUEST_BRANCH}
+  export STAGE_TYPE="pr_number"
+  export STAGE_ID=${PULL_REQUEST_NUMBER}
+fi
+
+echo "======= SHA1 is ${GIT_SHA1} on branch '${GITHUB_BRANCH_NAME}'. Burgr stage '${STAGE_TYPE} with stage ID '${STAGE_ID} ======="
+
+# get current version from pom
+export CURRENT_VERSION=`maven_expression "project.version"`
+export ARTIFACTID=`maven_expression "project.artifactId"`
+
+if [[ $CURRENT_VERSION =~ "-SNAPSHOT" ]]; then
+  echo "======= Found SNAPSHOT version ======="
+  # Do not deploy a SNAPSHOT version but the release version related to this build
+  . set_maven_build_version $TRAVIS_BUILD_NUMBER
+else
+  export PROJECT_VERSION=`maven_expression "project.version"`
+  echo "======= Found RELEASE version ======="
+fi
