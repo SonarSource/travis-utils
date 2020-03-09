@@ -1,0 +1,29 @@
+#!/bin/bash
+# Does a call to the Burgr API
+# Usage: call_burgr $BURGR_FILE $BURGR_STAGE_URL
+
+# Needs setup_promote_environment to be run before.
+
+# Needs BURGRX_USER and BURGRX_PASSWORD in the environment.
+
+HTTP_CODE=$(curl --silent --output out.txt --write-out %{http_code} \
+    -d @$1 \
+    -H "Content-type: application/json" \
+    -X POST \
+    -u"${BURGRX_USER}:${BURGRX_PASSWORD}" \
+    $2)
+
+echo "The payload sent to burgr was:"
+cat $1
+if [[ "$HTTP_CODE" != "200" ]] && [[ "$HTTP_CODE" != "201" ]]; then
+  echo ""
+  echo "Burgr did not ACK notification ($HTTP_CODE)"
+  echo "ERROR:"
+  cat out.txt
+  echo ""
+  exit -1
+else
+  echo ""
+  echo "Burgr ACKed notification for call to $2"
+  echo ""
+fi

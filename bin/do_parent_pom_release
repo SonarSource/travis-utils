@@ -1,0 +1,47 @@
+#!/bin/bash
+# Does the release of the parent pom.xml (either for private or public repos)
+# Usage: do_parent_pom_release REPOX_REPO
+# Example for public repox repository: do_parent_pom_release "sonarsource-public-releases"
+
+# Needs setup_promote_environment to be run before.
+
+if [[ $STAGE_ID != "master" ]] || [[ $CURRENT_VERSION =~ "-SNAPSHOT" ]]; then
+  echo "This is a dev build or is not on master, not releasing."
+  exit 0
+else
+  echo "About to release ${ARTIFACTID}."
+fi
+
+# from the old Jenkins promote-release.sh script
+
+STATUS='released'
+OP_DATE=$(date +%Y%m%d%H%M%S)
+TARGET_REPOSITORY=$1
+DATA_JSON="{ \"status\": \"$STATUS\", \"properties\": { \"release\" : [ \"$OP_DATE\" ]}, \"targetRepo\": \"$TARGET_REPOSITORY\", \"copy\": false }"
+
+RELEASE_URL="$ARTIFACTORY_URL/api/build/promote/$PROJECT_NAME/$BUILD_NUMBER"
+echo "RELEASE_URL: $RELEASE_URL"
+echo "DATA_JSON: $DATA_JSON"
+
+HTTP_CODE=$(curl -s --output release-out.txt -w %{http_code} \
+  -H "X-JFrog-Art-Api:${ARTIFACTORY_API_KEY}" \
+  -H "Content-type: application/json" \
+  -X POST \
+  "$RELEASE_URL" \
+  -d "$DATA_JSON")
+
+if [ "$HTTP_CODE" != "200" ]; then
+  echo "Cannot release build ${PROJECT_NAME} #${BUILD_NUMBER}: ($HTTP_CODE)"
+  echo ""
+  echo "ERROR:"
+  cat release-out.txt
+  echo ""
+  exit 1
+else
+  echo "Build ${PROJECT_NAME} #${BUILD_NUMBER} released to ${TARGET_REPOSITORY}"
+fi
+
+# Notify Burgr
+
+RELEASE_DATETIME=`date --utc +%FT%TZ`
+notify_burgr "release" "release" "$ARTIFACT_URL" "$RELEASE_DATETIME" "$RELEASE_DATETIME"
