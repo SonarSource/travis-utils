@@ -15,7 +15,7 @@ if [ -z $TRAVIS_PULL_REQUEST_SHA ]; then
   export GIT_SHA1=${TRAVIS_COMMIT} # $CIRRUS_CHANGE_IN_REPO
   export GITHUB_BRANCH=${TRAVIS_BRANCH} #$CIRRUS_BRANCH
   export STAGE_TYPE="branch"
-  export STAGE_ID=${GITHUB_BRANCH_NAME}
+  export STAGE_ID=${GITHUB_BRANCH}
 else
   export GIT_SHA1=${TRAVIS_PULL_REQUEST_SHA}
   export GITHUB_BRANCH=${TRAVIS_PULL_REQUEST_BRANCH}
@@ -23,17 +23,8 @@ else
   export STAGE_ID=${PULL_REQUEST_NUMBER}
 fi
 
-echo "======= SHA1 is ${GIT_SHA1} on branch '${GITHUB_BRANCH_NAME}'. Burgr stage '${STAGE_TYPE} with stage ID '${STAGE_ID} ======="
+echo "======= SHA1 is ${GIT_SHA1} on branch '${GITHUB_BRANCH}'. Burgr stage '${STAGE_TYPE} with stage ID '${STAGE_ID} ======="
 
 # get current version from pom
 export CURRENT_VERSION=`maven_expression "project.version"`
 export ARTIFACTID=`maven_expression "project.artifactId"`
-
-if [[ $CURRENT_VERSION =~ "-SNAPSHOT" ]]; then
-  echo "======= Found SNAPSHOT version ======="
-  # Do not deploy a SNAPSHOT version but the release version related to this build
-  . set_maven_build_version $TRAVIS_BUILD_NUMBER
-else
-  export PROJECT_VERSION=`maven_expression "project.version"`
-  echo "======= Found RELEASE version ======="
-fi
