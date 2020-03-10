@@ -4,7 +4,7 @@
 # - https://github.com/SonarSource/parent-oss
 # - https://github.com/SonarSource/parent
 
-# Needs setup_promote_environment to be run before.
+# Needs setup_promote_environment to be sourced before.
 
 # Needs $PROMOTE_URL and BURGRX_URL in the environment.
 
@@ -15,29 +15,4 @@ mvn deploy \
   -Pdeploy-sonarsource,release \
   -B -e -V
 
-# Google Cloud Function to do the promotion
-GCF_PROMOTE_URL="$PROMOTE_URL/$GITHUB_REPO/$GITHUB_BRANCH_NAME/$BUILD_NUMBER/$PULL_REQUEST_NUMBER"
-echo "GCF_PROMOTE_URL: $GCF_PROMOTE_URL"
-
-curl -sfSL -H "Authorization: Bearer $GCF_ACCESS_TOKEN" "$GCF_PROMOTE_URL"
-
-# Notify Burgr
-
-BUILD_END_DATETIME=`date --utc +%FT%TZ`
-# $TRAVIS_JOB_WEB_URL is defined by Travis
-
-notify_burgr "build" "promote" "$TRAVIS_JOB_WEB_URL" "$BUILD_START_DATETIME" "$BUILD_END_DATETIME"
-notify_burgr "artifacts" "promotion" "$ARTIFACT_URL" "$BUILD_END_DATETIME" "$BUILD_END_DATETIME"
-
-BURGR_VERSION_FILE=burgr_version
-cat > $BURGR_VERSION_FILE <<EOF1
-  {
-    "version": "$PROJECT_VERSION",
-    "build": "$BUILD_NUMBER",
-    "url":  "$ARTIFACT_URL"
-  }
-EOF1
-
-BURGR_VERSION_URL="$BURGRX_URL/api/promote/$GITHUB_REPO/$PIPELINE_ID"
-
-call_burgr $BURGR_VERSION_FILE $BURGR_VERSION_URL
+promote

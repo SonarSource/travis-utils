@@ -1,9 +1,9 @@
 #!/bin/bash
-# Does the release of the parent pom.xml (either for private or public repos)
-# Usage: do_parent_pom_release REPOX_REPO
-# Example for public repox repository: do_parent_pom_release "sonarsource-public-releases"
+# Promote from validated builds to release repository (either for private or public repos)
+# Usage: release REPOX_REPO
+# Example for public repox repository: release "sonarsource-public-releases"
 
-# Needs setup_promote_environment to be run before.
+# Needs setup_promote_environment to be sourced before.
 
 if [[ $STAGE_ID != "master" ]] || [[ $CURRENT_VERSION =~ "-SNAPSHOT" ]]; then
   echo "This is a dev build or is not on master, not releasing."
