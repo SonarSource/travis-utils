@@ -21,7 +21,7 @@ curl -sfSL -H "Authorization: Bearer $GCF_ACCESS_TOKEN" "$GCF_PROMOTE_URL"
 BUILD_END_DATETIME=`date --utc +%FT%TZ`
 # $TRAVIS_JOB_WEB_URL is defined by Travis
 
-notify_burgr "build" "promote" "$TRAVIS_JOB_WEB_URL" "$BUILD_START_DATETIME" "$BUILD_END_DATETIME"
+notify_burgr "build" "build" "$TRAVIS_JOB_WEB_URL" "$BUILD_START_DATETIME" "$BUILD_END_DATETIME"
 notify_burgr "artifacts" "promotion" "$ARTIFACT_URL" "$BUILD_END_DATETIME" "$BUILD_END_DATETIME"
 
 BURGR_VERSION_FILE=burgr_version
