@@ -28,7 +28,7 @@ BURGR_VERSION_FILE=burgr_version
 cat > $BURGR_VERSION_FILE <<EOF1
   {
     "version": "$PROJECT_VERSION",
-    "build": "$BUILD_NUMBER",
+    "buildNumber": "$BUILD_NUMBER",
     "url":  "$ARTIFACT_URL"
   }
 EOF1
