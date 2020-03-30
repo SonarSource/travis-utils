@@ -8,6 +8,8 @@
 
 # Needs $PROMOTE_URL and BURGRX_URL in the environment.
 
+set -euo pipefail
+
 BUILD_START_DATETIME=`date --utc +%FT%TZ`
 
 # Google Cloud Function to do the promotion

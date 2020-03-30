@@ -6,6 +6,8 @@
 
 # Needs BURGRX_USER and BURGRX_PASSWORD in the environment.
 
+set -euo pipefail
+
 HTTP_CODE=$(curl --silent --output out.txt --write-out %{http_code} \
     -d @$1 \
     -H "Content-type: application/json" \

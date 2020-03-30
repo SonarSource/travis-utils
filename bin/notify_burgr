@@ -8,6 +8,8 @@
 
 # Needs BURGR_FILE in the environment.
 
+set -euo pipefail
+
 # the Burgr stage type can be 'branch' or 'pr_number'
 BURGR_FILE=burgr
 cat > $BURGR_FILE <<EOF1 

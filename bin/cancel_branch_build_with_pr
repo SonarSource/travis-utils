@@ -8,6 +8,8 @@
 # Requires the environment variable GITHUB_TOKEN to check if a pull
 # request is open
 
+set -euo pipefail
+
 if [[ $TRAVIS_BRANCH != *"master" ]]; then
     if [ -n "${GITHUB_TOKEN:-}" ]; then    
         if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then 

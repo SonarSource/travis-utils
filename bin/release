@@ -5,6 +5,8 @@
 
 # Needs setup_promote_environment to be sourced before.
 
+set -euo pipefail
+
 if [[ $STAGE_ID != "master" ]] || [[ $CURRENT_VERSION =~ "-SNAPSHOT" ]]; then
   echo "This is a dev build or is not on master, not releasing."
   exit 0
