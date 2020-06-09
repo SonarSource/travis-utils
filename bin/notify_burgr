@@ -28,6 +28,6 @@ cat > $BURGR_FILE <<EOF1
     "finished_at": "$5"
   }
 EOF1
-echo $BURGR_FILE
+cat $BURGR_FILE
 BURGR_STAGE_URL="$BURGRX_URL/api/stage"
 call_burgr $BURGR_FILE $BURGR_STAGE_URL
