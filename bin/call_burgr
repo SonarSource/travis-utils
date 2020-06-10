@@ -8,6 +8,16 @@
 
 set -euo pipefail
 
+cat $1
+echo $2
+
+curl \
+    -d @$1 \
+    -H "Content-type: application/json" \
+    -X POST \
+    -u"${BURGRX_USER}:${BURGRX_PASSWORD}" \
+    $2
+
 HTTP_CODE=$(curl --silent --output out.txt --write-out %{http_code} \
     -d @$1 \
     -H "Content-type: application/json" \
