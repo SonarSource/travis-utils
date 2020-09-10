@@ -82,6 +82,9 @@ elif [[ "${TRAVIS_BRANCH}" == "branch-"* ]] && [ "$TRAVIS_PULL_REQUEST" == "fals
 elif [ "$TRAVIS_PULL_REQUEST" != "false" ] && [ -n "${GITHUB_TOKEN:-}" ]; then
   echo '======= Build and analyze pull request'
 
+  # Fetch base branch for full PR analysis + decoration
+  git fetch origin "${TRAVIS_BRANCH}:${TRAVIS_BRANCH}" || echo "Could not fetch base branch, PR analysis might have warnings"
+
   # Do not deploy a SNAPSHOT version but the release version related to this build and PR
   . set_maven_build_version $TRAVIS_BUILD_NUMBER
 
