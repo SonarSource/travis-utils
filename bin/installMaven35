@@ -5,5 +5,5 @@
 
 set -euo pipefail
 
-. installMaven 3.5.2
+. installMaven 3.5.4
 
