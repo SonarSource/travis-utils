@@ -24,7 +24,7 @@ fi
 
 export MAVEN_OPTS="-Xmx1536m -Xms128m"
 mvn deploy \
-  -Pdeploy-sonarsource,release \
+  -Pdeploy-sonarsource,release,sign \
   -B -e -V
 
 promote
