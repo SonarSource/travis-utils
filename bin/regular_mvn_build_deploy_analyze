@@ -29,7 +29,7 @@ if [ "${TRAVIS_BRANCH}" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; 
 
   export MAVEN_OPTS="-Xmx1536m -Xms128m"
   mvn deploy sonar:sonar \
-      -Pcoverage,deploy-sonarsource,release \
+      -Pcoverage,deploy-sonarsource,release,sign \
       -Dmaven.test.redirectTestOutputToFile=false \
       -Dsonar.host.url=$SONAR_HOST_URL \
       -Dsonar.login=$SONAR_TOKEN \
@@ -60,12 +60,12 @@ elif [[ "${TRAVIS_BRANCH}" == "branch-"* ]] && [ "$TRAVIS_PULL_REQUEST" == "fals
     # Do not deploy a SNAPSHOT version but the release version related to this build
     . set_maven_build_version $TRAVIS_BUILD_NUMBER
     mvn deploy \
-      -Pcoverage,deploy-sonarsource,release \
+      -Pcoverage,deploy-sonarsource,release,sign \
       -B -e -V $*
   else
     echo "======= Found RELEASE version ======="
     mvn deploy \
-      -Pcoverage,deploy-sonarsource,release \
+      -Pcoverage,deploy-sonarsource,release,sign \
       -B -e -V $*
   fi
 
@@ -136,7 +136,7 @@ elif [[ "$TRAVIS_BRANCH" == "dogfood-on-"* ]] && [ "$TRAVIS_PULL_REQUEST" == "fa
   . set_maven_build_version $TRAVIS_BUILD_NUMBER  
 
   mvn deploy \
-    -Pdeploy-sonarsource,release \
+    -Pdeploy-sonarsource,release,sign \
     -B -e -V $*
 
 elif [[ "$TRAVIS_BRANCH" == "feature/long/"* ]] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
