@@ -23,7 +23,7 @@ if [[ "$HTTP_CODE" != "200" ]] && [[ "$HTTP_CODE" != "201" ]]; then
   echo "ERROR:"
   cat out.txt
   echo ""
-  exit -1
+  exit 1
 else
   echo ""
   echo "Burgr ACKed notification for call to $2"

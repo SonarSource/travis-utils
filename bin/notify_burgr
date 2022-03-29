@@ -1,17 +1,21 @@
 #!/bin/bash
 # Sends a notification to the Burgr API.
-# Usage: notify_burgr $BURGR_FILE $BURGR_STAGE_URL
+# Usage: notify_burgr <name> <type> <job url> <start time> <end time> [<status>]
+# Default status is 'passed'
 # Example: notify_burgr "build" "promote" "$TRAVIS_JOB_WEB_URL" "$BUILD_START_DATETIME" "$BUILD_END_DATETIME"
 # See burgr API details https://github.com/SonarSource/burgr/tree/master/api
 
-# Needs setup_promote_environment to be run before.
-
-# Needs BURGR_FILE in the environment.
+# Required environment variables (run 'setup_promote_environment' before):
+# - GITHUB_REPO, GIT_SHA1
+# - PIPELINE_ID
+# - STAGE_TYPE: the Burgr stage type can be 'branch' or 'pr_number'
+# - STAGE_ID
+# - BURGRX_URL, BURGRX_USER, BURGRX_PASSWORD
 
 set -euo pipefail
 
-# the Burgr stage type can be 'branch' or 'pr_number'
 BURGR_FILE=burgr
+status=${6:-passed}
 cat > $BURGR_FILE <<EOF1 
   {
     "repository": "$GITHUB_REPO",
@@ -23,11 +27,11 @@ cat > $BURGR_FILE <<EOF1
     "$STAGE_TYPE": "$STAGE_ID",
     "sha1": "$GIT_SHA1",
     "url":"$3",
-    "status": "passed",
+    "status": "$status",
     "started_at": "$4",
     "finished_at": "$5"
   }
 EOF1
 
 BURGR_STAGE_URL="$BURGRX_URL/api/stage"
-call_burgr $BURGR_FILE $BURGR_STAGE_URL
+call_burgr $BURGR_FILE "$BURGR_STAGE_URL"
