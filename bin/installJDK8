@@ -3,7 +3,7 @@
 # download and unzip jdk8 to ~/jvm directory
 
 set -euo pipefail
-JDK_RELEASE=jdk8u212-b03
+JDK_RELEASE=jdk8u392-b08
 echo "Setup $JDK_RELEASE"
 mkdir -p ~/jvm
 pushd ~/jvm > /dev/null
